@@ -1,7 +1,8 @@
-package com.geanbrandao.minhasdespesas
+package com.geanbrandao.minhasdespesas.ui.main.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.geanbrandao.minhasdespesas.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
