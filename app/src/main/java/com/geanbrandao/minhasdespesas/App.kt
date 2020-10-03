@@ -4,12 +4,16 @@ import android.app.Application
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+import timber.log.Timber
+
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
         initAppCenter()
+
+        Timber.plant(Timber.DebugTree())
     }
 
     private fun initAppCenter() {
