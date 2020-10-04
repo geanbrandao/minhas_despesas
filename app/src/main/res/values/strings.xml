@@ -7,4 +7,7 @@
     <string name="home_fragment_title_spent">Quanto já gastei?</string>
     <string name="text_value_money">R$ %.2f</string>
     <string name="home_fragment_count_spent">Quatidade de itens: %d</string>
+    <string name="dialog_options_expense_text_title">Selecione uma opção</string>
+    <string name="dialog_option_expense_text_edit">Editar item</string>
+    <string name="dialog_option_expense_text_delete">Delete item</string>
 </resources>

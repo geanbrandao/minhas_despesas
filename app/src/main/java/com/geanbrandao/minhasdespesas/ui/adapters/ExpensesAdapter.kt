@@ -28,6 +28,10 @@ class ExpensesAdapter (
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = data[position]
 
+        holder.itemView.setOnClickListener {
+            onClick.invoke(item)
+        }
+
 //        holder.bindView(item)
     }
 

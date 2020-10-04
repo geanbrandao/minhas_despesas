@@ -1,13 +1,19 @@
 package com.geanbrandao.minhasdespesas.ui.navigation.home
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.adapters.ExpensesAdapter
+import kotlinx.android.synthetic.main.dialog_options_expense.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
@@ -24,7 +30,7 @@ class HomeFragment : Fragment() {
         ExpensesAdapter(
             requireContext(),
         {
-
+            openOptions(it)
         })
     }
 
@@ -44,6 +50,33 @@ class HomeFragment : Fragment() {
         root.recycler.adapter = adapter
 
         adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
+    }
+
+    private fun openOptions(item: ExpensesData) {
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_options_expense, null)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(view)
+        val alertDialog = builder.create()
+
+        val close = view.image_close as AppCompatImageView
+        val optionEdit = view.text_option_edit as AppCompatTextView
+        val optionDelete = view.text_option_delete as AppCompatTextView
+
+        close.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        optionEdit.setOnClickListener {
+
+        }
+
+        optionDelete.setOnClickListener {
+
+        }
+
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        alertDialog.show()
     }
 
     companion object {
