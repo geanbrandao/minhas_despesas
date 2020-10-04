@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Minhas despesas</string>
+    <string name="item_home">home</string>
+    <string name="item_config">Configurações</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_fragment_title_spent">Quanto já gastei?</string>
+    <string name="text_value_money">R$ %.2f</string>
+    <string name="home_fragment_count_spent">Quatidade de itens: %d</string>
 </resources>
