@@ -11,7 +11,9 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.geanbrandao.minhasdespesas.R
+import com.geanbrandao.minhasdespesas.goToActivity
 import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.ui.AddEditActivity
 import com.geanbrandao.minhasdespesas.ui.adapters.ExpensesAdapter
 import com.geanbrandao.minhasdespesas.ui.navigation.home.HomeViewModel
 import io.reactivex.disposables.Disposable
@@ -67,6 +69,10 @@ class HomeFragment : Fragment() {
         adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
         adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
         adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
+
+        root.image_add.setOnClickListener {
+            activity?.goToActivity(AddEditActivity::class.java)
+        }
     }
 
     private fun getExpenses() {

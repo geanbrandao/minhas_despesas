@@ -10,4 +10,7 @@
     <string name="dialog_options_expense_text_title">Selecione uma opção</string>
     <string name="dialog_option_expense_text_edit">Editar item</string>
     <string name="dialog_option_expense_text_delete">Delete item</string>
+    <string name="button_default_save">Salvar</string>
+    <string name="button_default_cancelar">Cancelar</string>
+    <string name="add_edit_activity_title_page">Adicionar item</string>
 </resources>
