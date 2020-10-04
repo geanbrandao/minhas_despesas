@@ -38,7 +38,7 @@ class ExpensesAdapter (
     override fun getItemCount() = data.size
 
     fun clear() {
-        this.clear()
+        this.data.clear()
         notifyDataSetChanged()
     }
 

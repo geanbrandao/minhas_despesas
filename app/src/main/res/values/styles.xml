@@ -21,37 +21,46 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="text_title"
-        parent="@style/TextAppearance.AppCompat.Title">
+    <style name="text_title">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/montserrat_semibold</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
-    <style name="text_regular"
-        parent="@style/TextAppearance.AppCompat.Title">
+    <style name="text_regular">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
-    <style name="text_title_extra_large"
-        parent="@style/TextAppearance.AppCompat.Title">
+    <style name="text_title_extra_large">
         <item name="android:textSize">22sp</item>
         <item name="android:fontFamily">@font/montserrat_bold</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
-    <style name="text_title_small"
-        parent="@style/TextAppearance.AppCompat.Title">
+    <style name="text_title_small">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/montserrat_light</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
+    <style name="input_amount">
+        <item name="android:textSize">22dp</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:inputType">numberDecimal</item>
+    </style>
 
+    <style name="button_enabled_accent">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+    </style>
 
 </resources>

@@ -3,7 +3,7 @@ package com.geanbrandao.minhasdespesas.ui.home
 import android.os.Bundle
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.ui.base.BaseActivity
-import com.geanbrandao.minhasdespesas.ui.navigation.home.HomeFragment
+import com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity() {

@@ -1,4 +1,4 @@
-package com.geanbrandao.minhasdespesas.ui.navigation.home
+package com.geanbrandao.minhasdespesas.ui.navigation.home.fragments
 
 import android.app.AlertDialog
 import android.graphics.Color
@@ -13,8 +13,13 @@ import androidx.fragment.app.Fragment
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.adapters.ExpensesAdapter
+import com.geanbrandao.minhasdespesas.ui.navigation.home.HomeViewModel
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.dialog_options_expense.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 
 /**
@@ -25,6 +30,10 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 class HomeFragment : Fragment() {
 
     private lateinit var root: View
+
+    private val viewModel: HomeViewModel by viewModel()
+
+    private var disposable: Disposable? = null
 
     private val adapter: ExpensesAdapter by lazy {
         ExpensesAdapter(
@@ -41,6 +50,12 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_home, container, false)
 
+        savedInstanceState?.let {
+
+        } ?: run {
+            getExpenses()
+        }
+
         createListeners()
 
         return root
@@ -50,6 +65,22 @@ class HomeFragment : Fragment() {
         root.recycler.adapter = adapter
 
         adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
+        adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
+        adapter.addAll(arrayListOf(ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData(),ExpensesData()))
+    }
+
+    private fun getExpenses() {
+        disposable = viewModel.getAll(requireContext())
+            .subscribeBy(
+                onNext = {
+//                    adapter.clear()
+                    adapter.addAll(it.toCollection(ArrayList()))
+                },
+                onError = {
+                    Timber.e(it)
+                },
+                onComplete = {}
+            )
     }
 
     private fun openOptions(item: ExpensesData) {
@@ -79,6 +110,11 @@ class HomeFragment : Fragment() {
         alertDialog.show()
     }
 
+    override fun onStop() {
+        super.onStop()
+        disposable?.dispose()
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -90,5 +126,5 @@ class HomeFragment : Fragment() {
         fun newInstance() = HomeFragment()
     }
 
-
+    // TODO Dar uma opcao de definir um teto de gastos. E deixar o total em vermelho qunado o total for excedido
 }

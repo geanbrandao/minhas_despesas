@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_radius_9dp"
+    android:background="@drawable/bg_accent_radius_9dp"
     android:padding="32dp">
 
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:indeterminate="true"
-        app:cpb_color="@color/colorPrimary"
+        app:cpb_color="@color/colorWhite"
         app:cpb_stroke_width="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

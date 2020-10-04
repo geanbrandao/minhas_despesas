@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomAppCompatEditText">
+        <attr name="state_error" format="boolean" />
+        <attr name="icon_error" format="reference" />
+        <attr name="text_icon_error" format="string" />
+        <attr name="icon_help" format="reference" />
+    </declare-styleable>
+</resources>

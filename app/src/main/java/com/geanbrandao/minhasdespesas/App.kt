@@ -1,15 +1,21 @@
 package com.geanbrandao.minhasdespesas
 
 import android.app.Application
+import com.geanbrandao.minhasdespesas.module.viewModelModule
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        startKoin{
+            modules(listOf(viewModelModule))
+        }
 
         initAppCenter()
 
