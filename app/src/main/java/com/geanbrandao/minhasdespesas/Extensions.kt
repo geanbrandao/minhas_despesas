@@ -12,9 +12,8 @@ import android.view.LayoutInflater
 import android.view.TouchDelegate
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.custom_error_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_error.view.*
 import java.text.SimpleDateFormat
-import java.time.Month
 import java.util.*
 
 fun Activity.getScreenWidth(percent: Float): Float {
@@ -77,7 +76,7 @@ fun Date.toStringDateFormated(): String {
 
 fun Activity.showDialogMessage(message: String): AlertDialog {
     val dialogView =
-        LayoutInflater.from(this).inflate(R.layout.custom_error_dialog, null)
+        LayoutInflater.from(this).inflate(R.layout.dialog_error, null)
     val builder = AlertDialog.Builder(this)
     builder.setView(dialogView)
     val alertDialog = builder.create()

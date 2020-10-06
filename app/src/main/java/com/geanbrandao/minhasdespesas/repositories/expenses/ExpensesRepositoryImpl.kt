@@ -28,4 +28,8 @@ class ExpensesRepositoryImpl: ExpensesRepository {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
+
+    fun clearDatabase(context: Context) {
+
+    }
 }

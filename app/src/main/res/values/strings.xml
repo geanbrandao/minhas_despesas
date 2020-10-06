@@ -15,4 +15,8 @@
     <string name="add_edit_activity_title_page">Adicionar item</string>
     <string name="errors_generic">Ops, algo deu errado!</string>
     <string name="buttons_default_ok">ok</string>
+    <string name="setting_fragment_options_clear_expenses">Excluir todas as despesas</string>
+    <string name="buttons_default_cancel">Cancelar</string>
+    <string name="setting_fragment_option_setup_limit">Configurar limite mensal de gastos</string>
+    <string name="setting_fragment_options_see_statics">Ver estatísticas</string>
 </resources>
