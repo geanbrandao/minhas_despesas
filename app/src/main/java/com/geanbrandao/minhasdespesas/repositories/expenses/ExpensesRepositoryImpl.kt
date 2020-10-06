@@ -16,7 +16,7 @@ class ExpensesRepositoryImpl: ExpensesRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun addExpense(context: Context, data: ExpensesData): Completable {
+    override fun addExpense(context: Context, data: ExpensesData): Completable {
         return MyDatabase.getDatabaseInstance(context).expensesDao().insertExpense(data)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

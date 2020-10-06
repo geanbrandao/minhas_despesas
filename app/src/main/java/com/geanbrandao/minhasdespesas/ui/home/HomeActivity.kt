@@ -1,10 +1,14 @@
 package com.geanbrandao.minhasdespesas.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.ui.base.BaseActivity
 import com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment
+import com.geanbrandao.minhasdespesas.ui.navigation.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_home.*
+import timber.log.Timber
+
 
 class HomeActivity : BaseActivity() {
 
@@ -14,8 +18,16 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        createFragment(intent.getIntExtra("screen", R.id.home))
-        setButtonNavigation(intent.getIntExtra("screen", R.id.home))
+        savedInstanceState?.let {
+            Timber.d("criando as tabs SAVEINSTANCE")
+
+        } ?: run {
+            Timber.d("criando as tabs SAVEINSTANCE NULL")
+            createFragment(intent.getIntExtra("screen", R.id.home))
+            setButtonNavigation(intent.getIntExtra("screen", R.id.home))
+        }
+
+
         createListeners()
     }
 
@@ -101,9 +113,9 @@ class HomeActivity : BaseActivity() {
 //                    .commit()
 //            }
             R.id.settings -> {
-                val profileFragment = HomeFragment.newInstance()
+                val settingsFragment = SettingsFragment.newInstance()
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, profileFragment, "profile")
+                    .replace(R.id.fragment, settingsFragment, "settings")
                     .addToBackStack(null)
                     .commit()
             }
@@ -134,12 +146,19 @@ class HomeActivity : BaseActivity() {
 //                    .commit()
 //            }
             R.id.settings -> {
-                val fragment11 = HomeFragment.newInstance()
+                val settingsFragment = SettingsFragment.newInstance()
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, fragment11, "profile")
+                    .replace(R.id.fragment, settingsFragment, "settings")
                     .addToBackStack(null)
                     .commit()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        for (fragment in supportFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
         }
     }
 

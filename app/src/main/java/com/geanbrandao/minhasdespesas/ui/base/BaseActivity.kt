@@ -25,14 +25,16 @@ open class BaseActivity : AppCompatActivity() {
                 quantity = getInt(QUANTITY_KEY, 0)
             }
         }
+
+        createLoader()
     }
 
     fun hideLoader() {
-        Timber.d("hideLoader - quantity $quantity")
+//        Timber.d("hideLoader - quantity $quantity")
         if (quantity > 1) {
             quantity -= 1
         } else {
-            Timber.d("hideLoader - quantity $quantity")
+//            Timber.d("hideLoader - quantity $quantity")
             quantity = 0
             loader!!.dismiss()
         }
@@ -40,7 +42,7 @@ open class BaseActivity : AppCompatActivity() {
 
     fun showLoader() {
         quantity += 1
-        Timber.d("showLoader - quantity $quantity")
+//        Timber.d("showLoader - quantity $quantity")
         loader?.show()
         val x = getScreenWidth(0.6f).toInt()
         loader?.window?.attributes?.width = x

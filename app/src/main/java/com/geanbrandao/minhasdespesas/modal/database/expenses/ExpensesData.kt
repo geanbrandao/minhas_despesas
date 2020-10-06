@@ -3,6 +3,7 @@ package com.geanbrandao.minhasdespesas.modal.database.expenses
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = ExpensesData.TABLE_NAME)
@@ -13,7 +14,7 @@ class ExpensesData(
     val id: Long,
 
     @ColumnInfo(name = AMOUNT)
-    val amount: String,
+    val amount: Float,
 
     @ColumnInfo(name = TITLE)
     val title: String,
@@ -24,9 +25,9 @@ class ExpensesData(
     @ColumnInfo(name = DESCRIPTION)
     val description: String
 
-) {
+): Serializable {
 
-    constructor(): this(0, "", "", Date(), "")
+    constructor(): this(0, 0f, "", Date(), "")
 
     companion object {
         const val TABLE_NAME = "expense"
@@ -36,5 +37,9 @@ class ExpensesData(
         const val TAGS = "tags"
         const val DATE = "date"
         const val DESCRIPTION = "description"
+    }
+
+    override fun toString(): String {
+        return "$id - $amount - $title - $date - $description"
     }
 }

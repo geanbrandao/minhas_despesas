@@ -1,4 +1,4 @@
-package com.geanbrandao.minhasdespesas.ui.navigation.home
+package com.geanbrandao.minhasdespesas.ui.add_edit
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -6,17 +6,11 @@ import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.repositories.expenses.ExpensesRepository
 import com.geanbrandao.minhasdespesas.repositories.expenses.ExpensesRepositoryImpl
 import io.reactivex.Completable
-import io.reactivex.Flowable
 
-class HomeViewModel : ViewModel() {
-
-    private val mRepository: ExpensesRepository = ExpensesRepositoryImpl()
-
-    fun getAll(context: Context): Flowable<List<ExpensesData>> {
-        return mRepository.getAll(context)
-    }
+class AddEditViewModel: ViewModel() {
+    private val mReposirtory: ExpensesRepository = ExpensesRepositoryImpl()
 
     fun addExpense(context: Context, data: ExpensesData): Completable {
-        return mRepository.addExpense(context, data)
+        return mReposirtory.addExpense(context, data)
     }
 }

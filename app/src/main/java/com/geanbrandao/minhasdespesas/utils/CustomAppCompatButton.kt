@@ -1,4 +1,4 @@
-package com.geanbrandao.eventmanager.utils
+package com.geanbrandao.minhasdespesas.utils
 
 import android.content.Context
 import android.util.AttributeSet

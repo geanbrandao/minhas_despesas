@@ -10,7 +10,7 @@ interface ExpensesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertExpense(data: ExpensesData): Completable
 
-    @Query("SELECT * FROM ${ExpensesData.TABLE_NAME}")
+    @Query("SELECT * FROM ${ExpensesData.TABLE_NAME} ORDER BY date DESC")
     fun getAll(): Flowable<List<ExpensesData>>
 
     @Delete

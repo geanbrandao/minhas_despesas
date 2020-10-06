@@ -32,7 +32,7 @@ class ExpensesAdapter (
             onClick.invoke(item)
         }
 
-//        holder.bindView(item)
+        holder.bindView(item)
     }
 
     override fun getItemCount() = data.size
@@ -58,7 +58,8 @@ class ExpensesAdapter (
             title.text = item.title
             month.text = item.date.getMonth3LettersName()
             day.text = item.date.getDayNumber()
-            amount.text = "R$ %.2f".format(item.amount)
+//            amount.text = "R$ %.2f".format(item.amount)
+            amount.text = itemView.context.getString(R.string.text_value_money, item.amount.toFloat())
         }
 
     }
