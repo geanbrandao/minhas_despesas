@@ -13,21 +13,19 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.geanbrandao.minhasdespesas.R
-import com.geanbrandao.minhasdespesas.goToActivity
 import com.geanbrandao.minhasdespesas.goToActivityFoResult
 import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.showDialogMessage
 import com.geanbrandao.minhasdespesas.ui.add_edit.activity.AddEditActivity
 import com.geanbrandao.minhasdespesas.ui.adapters.ExpensesAdapter
+import com.geanbrandao.minhasdespesas.ui.base.fragment.BaseFragment
 import com.geanbrandao.minhasdespesas.ui.navigation.home.HomeViewModel
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.dialog_options_expense.view.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -36,14 +34,15 @@ import kotlin.collections.ArrayList
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private lateinit var root: View
 
     private val viewModel: HomeViewModel by viewModel()
 
-    private var disposable: Disposable? = null
-    private var disposable2: Disposable? = null
+    private var disposableGet: Disposable? = null
+    private var disposableAdd: Disposable? = null
+    private var disposableDelete: Disposable? = null
 
     private var amoutSpent: Float = 0.0f
     private var countItems: Int = 0
@@ -64,6 +63,10 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_home, container, false)
+
+
+        // CreateLoader
+        createLoader(requireContext())
 
         Timber.d("CREATE VIEW")
 
@@ -100,13 +103,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun getExpenses() {
-        disposable = viewModel.getAll(requireContext())
+        disposableGet = viewModel.getAll(requireContext())
             .subscribeBy(
                 onNext = {
                     Timber.d("Chamou o onNext = ${it.size}")
                     adapter.clear()
                     adapter.addAll(it.toCollection(ArrayList()))
 
+                    amoutSpent = 0f
                     it.forEach { expense ->
                         amoutSpent+= expense.amount
                     }
@@ -142,12 +146,31 @@ class HomeFragment : Fragment() {
         }
 
         optionDelete.setOnClickListener {
-
+            deleteItem(item)
+            alertDialog.dismiss()
         }
 
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         alertDialog.show()
+    }
+
+    private fun deleteItem(item: ExpensesData) {
+        disposableDelete = viewModel.deleteExpense(requireContext(), item)
+            .doOnSubscribe {
+                showLoader()
+            }.doFinally {
+                hideLoader()
+            }
+            .subscribeBy(
+                onError = {
+                    Timber.e(it)
+                    activity?.showDialogMessage(requireContext().getString(R.string.errors_generic))
+                },
+                onComplete = {
+                    Timber.d("delete item from database")
+                }
+            )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -167,7 +190,12 @@ class HomeFragment : Fragment() {
 
     private fun addItem(item: ExpensesData) {
 
-        disposable2 = viewModel.addExpense(requireContext(), item)
+        disposableAdd = viewModel.addExpense(requireContext(), item)
+            .doOnSubscribe {
+                showLoader()
+            }.doFinally {
+                hideLoader()
+            }
             .subscribeBy(
                 onError = {
                     Timber.e(it)
@@ -188,8 +216,8 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        disposable?.dispose()
-        disposable2?.dispose()
+        disposableGet?.dispose()
+        disposableAdd?.dispose()
     }
 
     companion object {

@@ -8,4 +8,5 @@ import io.reactivex.Flowable
 interface ExpensesRepository {
     fun getAll(context: Context): Flowable<List<ExpensesData>>
     fun addExpense(context: Context, data: ExpensesData): Completable
+    fun deleteExpense(context: Context, data: ExpensesData): Completable
 }

@@ -7,6 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.Android
 
 class ExpensesRepositoryImpl: ExpensesRepository {
 
@@ -18,6 +19,12 @@ class ExpensesRepositoryImpl: ExpensesRepository {
 
     override fun addExpense(context: Context, data: ExpensesData): Completable {
         return MyDatabase.getDatabaseInstance(context).expensesDao().insertExpense(data)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun deleteExpense(context: Context, data: ExpensesData): Completable {
+        return MyDatabase.getDatabaseInstance(context).expensesDao().delete(data)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

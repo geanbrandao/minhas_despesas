@@ -1,9 +1,8 @@
-package com.geanbrandao.minhasdespesas.ui.base
+package com.geanbrandao.minhasdespesas.ui.base.activity
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity

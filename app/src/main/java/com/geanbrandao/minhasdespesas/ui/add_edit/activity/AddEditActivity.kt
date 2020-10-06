@@ -9,9 +9,8 @@ import android.text.TextWatcher
 import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.add_edit.AddEditViewModel
-import com.geanbrandao.minhasdespesas.ui.base.BaseActivity
+import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
 import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_add_edit.*
 import kotlinx.android.synthetic.main.component_toolbar.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
