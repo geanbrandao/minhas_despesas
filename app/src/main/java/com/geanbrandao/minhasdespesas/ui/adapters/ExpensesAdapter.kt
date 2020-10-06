@@ -59,7 +59,7 @@ class ExpensesAdapter (
             month.text = item.date.getMonth3LettersName()
             day.text = item.date.getDayNumber()
 //            amount.text = "R$ %.2f".format(item.amount)
-            amount.text = itemView.context.getString(R.string.text_value_money, item.amount.toFloat())
+            amount.text = itemView.context.getString(R.string.text_value_money, item.amount)
         }
 
     }

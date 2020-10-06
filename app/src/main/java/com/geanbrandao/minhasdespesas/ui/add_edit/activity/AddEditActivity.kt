@@ -10,6 +10,7 @@ import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.add_edit.AddEditViewModel
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
+import com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_add_edit.*
 import kotlinx.android.synthetic.main.component_toolbar.view.*
@@ -32,6 +33,19 @@ class AddEditActivity : BaseActivity() {
         setContentView(R.layout.activity_add_edit)
 
         createListeners()
+
+        savedInstanceState?.let {
+
+        } ?: run {
+            val item = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as ExpensesData?
+            item?.let {
+                input_amount.setText("%.2f".format(item.amount))
+                input_title.setText(item.title)
+                text_date.text = item.date.toStringDateFormated()
+                input_description.setText(item.description)
+            }
+        }
+
     }
 
     private fun createListeners() {
@@ -60,7 +74,7 @@ class AddEditActivity : BaseActivity() {
                         .replace(".", "")
                         .replace(",", "")
                         .replace("-", "")
-                    val parsed = clearText.toDouble() / 100
+                    val parsed = clearText.toDouble() / 100f
                     val formatted = "%.2f".format(parsed.toFloat())
                     input_amount.setText(formatted)
                     input_amount.setSelection(formatted.length)
@@ -92,21 +106,46 @@ class AddEditActivity : BaseActivity() {
     }
 
     private fun addItem() {
-        val data: ExpensesData = getData()
-        Timber.d("data - ${data.toString()}")
 
-        val intent = Intent()
-        intent.putExtra("expense", data)
-        setResult(RESULT_OK, intent)
-        finish()
+        intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY)?.let {
+            // EDIT
+            val data: ExpensesData = getData()
+            Timber.d("data - ${data.toString()}")
+
+            val intent = Intent()
+            intent.putExtra("expense", data)
+            setResult(RESULT_OK, intent)
+            finish()
+
+        }?: run {
+            // ADD
+            val data: ExpensesData = getData()
+            Timber.d("data - ${data.toString()}")
+
+            val intent = Intent()
+            intent.putExtra("expense", data)
+            setResult(RESULT_OK, intent)
+            finish()
+        }
+
+
     }
 
     private fun getData(): ExpensesData {
+
+        val data: ExpensesData? = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as ExpensesData?
+
+        val id = data?.let {
+            it.id
+        } ?: run {
+            0
+        }
+
         val title = input_title.text.toString()
         val amount = input_amount.text.toString().replace(",", "").toInt() / 100f
         val description =  input_description.text.toString()
 
-        return ExpensesData(0, amount, title, date ?: Date(), description)
+        return ExpensesData(id, amount, title, date ?: Date(), description)
     }
 
     private fun setupToolbar() {

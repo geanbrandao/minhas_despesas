@@ -23,4 +23,8 @@ class HomeViewModel : ViewModel() {
     fun deleteExpense(context: Context, data: ExpensesData): Completable {
         return mRepository.deleteExpense(context, data)
     }
+
+    fun updateExpense(context: Context, data: ExpensesData): Completable {
+        return mRepository.updateItem(context, data)
+    }
 }

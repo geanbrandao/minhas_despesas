@@ -43,6 +43,7 @@ class HomeFragment : BaseFragment() {
     private var disposableGet: Disposable? = null
     private var disposableAdd: Disposable? = null
     private var disposableDelete: Disposable? = null
+    private var disposableUpdate: Disposable? = null
 
     private var amoutSpent: Float = 0.0f
     private var countItems: Int = 0
@@ -112,12 +113,14 @@ class HomeFragment : BaseFragment() {
 
                     amoutSpent = 0f
                     it.forEach { expense ->
-                        amoutSpent+= expense.amount
+                        amoutSpent += expense.amount
+                        Timber.d("data - ${expense.toString()}")
                     }
                     root.text_amount_spent.text = getString(R.string.text_value_money, amoutSpent)
 
                     countItems = it.size
-                    root.text_count_items.text = getString(R.string.home_fragment_count_spent, countItems)
+                    root.text_count_items.text =
+                        getString(R.string.home_fragment_count_spent, countItems)
                 },
                 onError = {
                     Timber.e(it)
@@ -142,7 +145,8 @@ class HomeFragment : BaseFragment() {
         }
 
         optionEdit.setOnClickListener {
-
+            editItem(item)
+            alertDialog.dismiss()
         }
 
         optionDelete.setOnClickListener {
@@ -153,6 +157,12 @@ class HomeFragment : BaseFragment() {
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         alertDialog.show()
+    }
+
+    private fun editItem(item: ExpensesData) {
+        val intent = Intent(requireActivity(), AddEditActivity::class.java)
+        intent.putExtra(EXPENSE_EDIT_KEY, item)
+        startActivityForResult(intent, EDIT_ITEM_CODE)
     }
 
     private fun deleteItem(item: ExpensesData) {
@@ -184,12 +194,37 @@ class HomeFragment : BaseFragment() {
                         activity?.showDialogMessage("Não foi possível aidiconar sua despesa.")
                     }
                 }
+                EDIT_ITEM_CODE -> {
+                    val value = data?.getSerializableExtra("expense") as ExpensesData?
+                    value?.let {
+                        updateItem(it)
+                    } ?: run {
+                        activity?.showDialogMessage("Não foi possível editar sua despesa.")
+                    }
+                }
             }
         }
     }
 
-    private fun addItem(item: ExpensesData) {
+    private fun updateItem(item: ExpensesData) {
+        disposableUpdate = viewModel.updateExpense(requireContext(), item)
+            .doOnSubscribe {
+                showLoader()
+            }.doFinally {
+                hideLoader()
+            }.subscribeBy(
+                onError = {
+                    Timber.e(it)
+                    activity?.showDialogMessage(requireContext().getString(R.string.errors_generic))
+                },
+                onComplete = {
+                    Timber.d("Item edited to database")
+                    getExpenses()
+                }
+            )
+    }
 
+    private fun addItem(item: ExpensesData) {
         disposableAdd = viewModel.addExpense(requireContext(), item)
             .doOnSubscribe {
                 showLoader()
@@ -218,6 +253,8 @@ class HomeFragment : BaseFragment() {
         super.onStop()
         disposableGet?.dispose()
         disposableAdd?.dispose()
+        disposableDelete?.dispose()
+        disposableUpdate?.dispose()
     }
 
     companion object {
@@ -231,9 +268,10 @@ class HomeFragment : BaseFragment() {
         fun newInstance() = HomeFragment()
 
         const val ADD_ITEM_CODE = 3212
-        const val DATA_KEY = "DATA_KEY"
+        const val EDIT_ITEM_CODE = 3213
         const val AMOUNT_SPENT_KEY = "AMOUNT_SPENT_KEY"
         const val COUNT_ITEMS_KEY = "COUNT_ITEMS_KEY"
+        const val EXPENSE_EDIT_KEY = "EXPENSE_EDIT_KEY"
     }
 
     // TODO Dar uma opcao de definir um teto de gastos. E deixar o total em vermelho qunado o total for excedido
