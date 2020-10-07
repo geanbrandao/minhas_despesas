@@ -6,14 +6,29 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.geanbrandao.minhasdespesas.modal.database.converters.Converters
-import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesDao
-import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesDao
+import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.modal.database.entity_expense_category_join.ExpenseCategoryJoinDao
+import com.geanbrandao.minhasdespesas.modal.database.entity_expense_category_join.ExpenseCategoryJoinData
+import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesDao
+import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
 
-@Database(entities = [ExpensesData::class], version = MyDatabase.DB_VERSION, exportSchema = false)
+@Database(
+    entities = [
+        ExpensesData::class,
+        CategoriesData::class,
+        ExpenseCategoryJoinData::class
+    ],
+    version = MyDatabase.DB_VERSION,
+    exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MyDatabase: RoomDatabase() {
 
     abstract fun expensesDao(): ExpensesDao
+
+    abstract fun categoriesDao(): CategoriesDao
+
+    abstract fun expenseCategoryJoinDao(): ExpenseCategoryJoinDao
 
     companion object {
         @Volatile

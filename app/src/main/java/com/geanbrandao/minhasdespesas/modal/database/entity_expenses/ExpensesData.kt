@@ -1,4 +1,4 @@
-package com.geanbrandao.minhasdespesas.modal.database.expenses
+package com.geanbrandao.minhasdespesas.modal.database.entity_expenses
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -31,7 +31,7 @@ class ExpensesData(
 
     companion object {
         const val TABLE_NAME = "expense"
-        const val ID = "expense_id"
+        const val ID = "id"
         const val AMOUNT = "amount"
         const val TITLE = "title"
         const val TAGS = "tags"

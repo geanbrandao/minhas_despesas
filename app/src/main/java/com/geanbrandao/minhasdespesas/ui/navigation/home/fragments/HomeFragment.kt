@@ -14,7 +14,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.goToActivityFoResult
-import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.showDialogMessage
 import com.geanbrandao.minhasdespesas.ui.add_edit.activity.AddEditActivity
 import com.geanbrandao.minhasdespesas.ui.adapters.ExpensesAdapter

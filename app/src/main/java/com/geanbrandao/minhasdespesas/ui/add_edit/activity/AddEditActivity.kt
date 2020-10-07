@@ -7,9 +7,10 @@ import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
 import com.geanbrandao.minhasdespesas.*
-import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.add_edit.AddEditViewModel
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
+import com.geanbrandao.minhasdespesas.ui.category.CategoryActivity
 import com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_add_edit.*
@@ -58,6 +59,10 @@ class AddEditActivity : BaseActivity() {
 
         text_date.setOnClickListener {
             picker.show()
+        }
+
+        text_category.setOnClickListener {
+            goToActivityFoResult(CategoryActivity::class.java, 123)
         }
 
         Selection.setSelection(input_amount.text, input_amount.text!!.length)

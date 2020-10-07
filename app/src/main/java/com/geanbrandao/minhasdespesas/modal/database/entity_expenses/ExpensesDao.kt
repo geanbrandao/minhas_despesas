@@ -1,4 +1,4 @@
-package com.geanbrandao.minhasdespesas.modal.database.expenses
+package com.geanbrandao.minhasdespesas.modal.database.entity_expenses
 
 import androidx.room.*
 import io.reactivex.Completable

@@ -11,7 +11,10 @@
         android:id="@+id/toolbar"
         layout="@layout/component_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
@@ -25,18 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="1.0">
-
-        <com.geanbrandao.minhasdespesas.utils.CustomAppCompatButton
-            android:id="@+id/button_save"
-            style="@style/button_enabled_accent"
-            android:layout_width="0dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="32dp"
-            android:stateListAnimator="@null"
-            android:text="@string/button_default_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_description" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_currency"
@@ -167,6 +158,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/input_description"
             app:layout_constraintTop_toBottomOf="@+id/input_description" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_tag"
+            style="@style/text_title_extra_large"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_tag"
+            app:layout_constraintBottom_toBottomOf="@+id/text_category"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_category"
+            app:tint="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_category"
+            style="@style/text_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableEnd="@drawable/ic_arrow_right_small"
+            android:drawablePadding="8dp"
+            android:padding="16dp"
+            android:text="Selecione as categorias"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorAccent"
+            app:drawableTint="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_tag"
+            app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+        <com.geanbrandao.minhasdespesas.utils.CustomAppCompatButton
+            android:id="@+id/button_save"
+            style="@style/button_enabled_accent"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="32dp"
+            android:stateListAnimator="@null"
+            android:text="@string/button_default_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_category" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

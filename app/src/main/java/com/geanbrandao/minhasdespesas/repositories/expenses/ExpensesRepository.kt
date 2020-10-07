@@ -1,7 +1,7 @@
 package com.geanbrandao.minhasdespesas.repositories.expenses
 
 import android.content.Context
-import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
 import io.reactivex.Completable
 import io.reactivex.Flowable
 

@@ -13,10 +13,12 @@
     <string name="button_default_save">Salvar</string>
     <string name="button_default_cancelar">Cancelar</string>
     <string name="add_edit_activity_title_page">Adicionar item</string>
+    <string name="category_activity_title_page">Selecionar categoria</string>
     <string name="errors_generic">Ops, algo deu errado!</string>
     <string name="buttons_default_ok">ok</string>
     <string name="setting_fragment_options_clear_expenses">Excluir todas as despesas</string>
     <string name="buttons_default_cancel">Cancelar</string>
     <string name="setting_fragment_option_setup_limit">Configurar limite mensal de gastos</string>
     <string name="setting_fragment_options_see_statics">Ver estatísticas</string>
+    <string name="buttons_default_save">Salvar</string>
 </resources>

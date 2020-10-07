@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.getDayNumber
 import com.geanbrandao.minhasdespesas.getMonth3LettersName
-import com.geanbrandao.minhasdespesas.modal.database.expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
 import kotlinx.android.synthetic.main.item_expense.view.*
 
 class ExpensesAdapter (
