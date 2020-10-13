@@ -1,27 +1,25 @@
-package com.geanbrandao.minhasdespesas.ui.navigation.settings
+package com.geanbrandao.minhasdespesas.ui.navigation.settings.fragments
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.geanbrandao.minhasdespesas.R
-import com.geanbrandao.minhasdespesas.modal.database.MyDatabase
+import com.geanbrandao.minhasdespesas.setHtmlText
 import com.geanbrandao.minhasdespesas.showDialogMessage
+import com.geanbrandao.minhasdespesas.showToast
 import com.geanbrandao.minhasdespesas.ui.base.fragment.BaseFragment
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.geanbrandao.minhasdespesas.ui.navigation.settings.SettingsViewModel
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_options.view.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
-import java.lang.StringBuilder
+import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -33,6 +31,8 @@ class SettingsFragment : BaseFragment() {
     private lateinit var root: View
 
     private var disposable: Disposable? = null
+
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +52,14 @@ class SettingsFragment : BaseFragment() {
         root.ll_option_clear.setOnClickListener {
             openDialogOptions("Tem certeza que deseja excluir todas suas despesas?")
         }
+
+        root.ll_option_limit.setOnClickListener {
+            activity?.showToast("Em breve")
+        }
+
+        root.ll_option_statistics.setOnClickListener {
+            activity?.showToast("Em breve")
+        }
     }
 
     private fun openDialogOptions(message: String) {
@@ -62,11 +70,7 @@ class SettingsFragment : BaseFragment() {
         val alertDialog = builder.create()
 
         if (message.isNotEmpty()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                dialogView.text_message.text = Html.fromHtml(message, Html.FROM_HTML_MODE_COMPACT)
-            } else {
-                dialogView.text_message.text = Html.fromHtml(message)
-            }
+                dialogView.text_message.setHtmlText(message)
         }
 
         dialogView.action_cancel.setOnClickListener {
@@ -75,7 +79,7 @@ class SettingsFragment : BaseFragment() {
 
         dialogView.action_ok.setOnClickListener {
             alertDialog.dismiss()
-            clearDB()
+            clearExpenses()
         }
 
 
@@ -87,6 +91,24 @@ class SettingsFragment : BaseFragment() {
         alertDialog.show()
     }
 
+    private fun clearExpenses() {
+        disposable = viewModel.deleteAll(requireContext())
+            .doOnSubscribe {
+                showLoader()
+            }
+            .doFinally {
+                hideLoader()
+            }.subscribeBy(
+                onError = {
+                    activity?.showDialogMessage("")
+                },
+                onComplete = {
+                    Timber.d("Expenses removed from database")
+                }
+            )
+    }
+
+    /*
     private fun clearDB() {
         disposable = Completable.fromAction {
             MyDatabase.getDatabaseInstance(requireContext())
@@ -108,6 +130,7 @@ class SettingsFragment : BaseFragment() {
                 }
             )
     }
+    */
 
     override fun onStop() {
         super.onStop()

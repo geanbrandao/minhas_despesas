@@ -9,13 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.getDayNumber
 import com.geanbrandao.minhasdespesas.getMonth3LettersName
-import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.model.Expense
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.toDate
 import kotlinx.android.synthetic.main.item_expense.view.*
 
 class ExpensesAdapter (
     private val context: Context,
-    private val onClick: ((item: ExpensesData) -> Unit),
-    private val data: ArrayList<ExpensesData> = arrayListOf()
+    private val onClick: ((item: Expense) -> Unit),
+    private val data: ArrayList<Expense> = arrayListOf()
 ): RecyclerView.Adapter<ExpensesAdapter.MyViewHolder>() {
 
 
@@ -42,8 +44,14 @@ class ExpensesAdapter (
         notifyDataSetChanged()
     }
 
-    fun addAll(data: ArrayList<ExpensesData>) {
+    fun addAll(data: ArrayList<Expense>) {
         this.data.addAll(data)
+        notifyDataSetChanged()
+    }
+
+
+    fun add(data: Expense) {
+        this.data.add(data)
         notifyDataSetChanged()
     }
 
@@ -54,11 +62,10 @@ class ExpensesAdapter (
         val amount = itemView.text_amount_spent as AppCompatTextView
 
 
-        fun bindView(item: ExpensesData) {
+        fun bindView(item: Expense) {
             title.text = item.title
-            month.text = item.date.getMonth3LettersName()
-            day.text = item.date.getDayNumber()
-//            amount.text = "R$ %.2f".format(item.amount)
+            month.text = item.date.toDate()?.getMonth3LettersName()
+            day.text = item.date.toDate()?.getDayNumber()
             amount.text = itemView.context.getString(R.string.text_value_money, item.amount)
         }
 

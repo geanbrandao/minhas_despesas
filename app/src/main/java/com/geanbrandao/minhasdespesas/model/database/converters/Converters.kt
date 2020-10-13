@@ -1,7 +1,7 @@
-package com.geanbrandao.minhasdespesas.modal.database.converters
+package com.geanbrandao.minhasdespesas.model.database.converters
 
 import androidx.room.TypeConverter
-import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
 import com.google.gson.GsonBuilder
 import java.util.*
 import kotlin.collections.ArrayList

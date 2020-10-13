@@ -164,10 +164,10 @@
             style="@style/text_title_extra_large"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_marginTop="32dp"
             android:src="@drawable/ic_tag"
-            app:layout_constraintBottom_toBottomOf="@+id/text_category"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_category"
+            app:layout_constraintTop_toBottomOf="@+id/input_description"
             app:tint="@color/colorAccent" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -175,7 +175,6 @@
             style="@style/text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:drawableEnd="@drawable/ic_arrow_right_small"
             android:drawablePadding="8dp"
             android:padding="16dp"
@@ -183,9 +182,27 @@
             android:textAlignment="textEnd"
             android:textColor="@color/colorAccent"
             app:drawableTint="@color/colorAccent"
+            tools:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/recycler_selected_category"
+            app:layout_constraintTop_toTopOf="@+id/image_tag"
+            app:layout_constraintBottom_toBottomOf="@id/image_tag"
+            app:layout_constraintStart_toEndOf="@id/image_tag"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_selected_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:foregroundGravity="center_vertical"
+            android:orientation="horizontal"
+            tools:visibility="gone"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toTopOf="@id/image_tag"
+            app:layout_constraintBottom_toBottomOf="@id/image_tag"
+            app:layout_constraintStart_toEndOf="@id/text_category"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/image_tag"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            tools:listitem="@layout/item_simple_category" />
 
         <com.geanbrandao.minhasdespesas.utils.CustomAppCompatButton
             android:id="@+id/button_save"

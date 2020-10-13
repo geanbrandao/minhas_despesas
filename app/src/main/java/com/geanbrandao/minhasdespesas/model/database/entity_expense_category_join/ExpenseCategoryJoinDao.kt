@@ -1,17 +1,21 @@
-package com.geanbrandao.minhasdespesas.modal.database.entity_expense_category_join
+package com.geanbrandao.minhasdespesas.model.database.entity_expense_category_join
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.util.*
 
 @Dao
 interface ExpenseCategoryJoinDao {
 
     @Insert
     fun insert(join: ExpenseCategoryJoinData): Completable
+
+    @Insert
+    fun insert(joins: List<ExpenseCategoryJoinData>): Completable
 
     @Query(
         """
@@ -20,5 +24,5 @@ interface ExpenseCategoryJoinDao {
             WHERE ${ExpenseCategoryJoinData.TABLE_NAME}.${ExpenseCategoryJoinData.EXPENSE_ID} = :expenseId
         """
     )
-    fun getCategoriesByExpenseId(expenseId: Long): Single<List<CategoriesData>>
+    fun getCategoriesByExpenseId(expenseId: String): Single<List<CategoriesData>>
 }

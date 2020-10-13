@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_accent_radius_9dp"
     android:padding="32dp">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/label_category"
+        style="@style/text_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_add_category_text_label"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorTextLight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/input_layout"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:counterEnabled="true"-->
+<!--        app:counterMaxLength="24"-->
+<!--        app:counterTextColor="@color/colorTextLight"-->
+<!--        android:hint="Categoria"-->
+<!--        app:hintTextColor="@color/colorTextLight"-->
+<!--        app:counterOverflowTextColor="@color/colorError"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/action_save"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
     <com.geanbrandao.minhasdespesas.utils.CustomAppCompatEditText
-        android:id="@+id/input_title"
+        android:id="@+id/input_category"
         style="@style/input_regular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:ellipsize="end"
-        android:inputType="textCapWords"
-        android:fontFamily="@font/montserrat_regular"
-        android:hint="Categoria"
-        android:textColorHint="#66FFFFFF"
-        android:textAlignment="textStart"
         android:imeOptions="actionDone"
-        android:maxLines="1"
         android:padding="16dp"
-        android:maxLength="16"
+        android:textAlignment="textStart"
         android:textColor="@color/colorTextLight"
-        app:layout_constraintBottom_toTopOf="@id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/label_category" />
+
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <View
         android:id="@+id/view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
         android:background="@color/colorTextLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_title" />
+        app:layout_constraintTop_toBottomOf="@+id/input_category" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/action_cancel"
@@ -51,9 +72,9 @@
         android:textAllCaps="true"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/action_ok"
+        app:layout_constraintEnd_toStartOf="@+id/action_save"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/input_category" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/action_save"
@@ -70,6 +91,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/action_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/input_category" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

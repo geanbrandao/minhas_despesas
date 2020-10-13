@@ -1,4 +1,4 @@
-package com.geanbrandao.minhasdespesas.modal.database.entity_expenses
+package com.geanbrandao.minhasdespesas.model.database.entity_expenses
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,9 +9,9 @@ import java.util.*
 @Entity(tableName = ExpensesData.TABLE_NAME)
 class ExpensesData(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = ID)
-    val id: Long,
+    val id: String,
 
     @ColumnInfo(name = AMOUNT)
     val amount: Float,
@@ -20,26 +20,27 @@ class ExpensesData(
     val title: String,
 
     @ColumnInfo(name = DATE)
-    val date: Date,
+    val date: String,
 
     @ColumnInfo(name = DESCRIPTION)
     val description: String
 
 ): Serializable {
 
-    constructor(): this(0, 0f, "", Date(), "")
+    constructor(): this(UUID.randomUUID().toString(), 0f, "", Date().toString(), "")
 
     companion object {
         const val TABLE_NAME = "expense"
         const val ID = "id"
         const val AMOUNT = "amount"
         const val TITLE = "title"
-        const val TAGS = "tags"
         const val DATE = "date"
         const val DESCRIPTION = "description"
+        const val CREATED_AT = "created_at"
+        const val UPDATED_AT = "updated_at"
     }
 
     override fun toString(): String {
-        return "$id - $amount - $title - $date - $description"
+        return "$id - $amount - $title - $date - $description "
     }
 }

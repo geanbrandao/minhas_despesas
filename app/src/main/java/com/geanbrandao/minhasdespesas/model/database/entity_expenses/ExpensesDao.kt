@@ -1,4 +1,4 @@
-package com.geanbrandao.minhasdespesas.modal.database.entity_expenses
+package com.geanbrandao.minhasdespesas.model.database.entity_expenses
 
 import androidx.room.*
 import io.reactivex.Completable
@@ -15,6 +15,9 @@ interface ExpensesDao {
 
     @Delete
     fun delete(data: ExpensesData): Completable
+
+    @Query("DELETE FROM ${ExpensesData.TABLE_NAME}")
+    fun deleteAll(): Completable
 
     @Update
     fun update(data: ExpensesData): Completable

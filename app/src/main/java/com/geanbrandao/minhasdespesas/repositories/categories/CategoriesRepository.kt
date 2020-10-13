@@ -1,7 +1,7 @@
 package com.geanbrandao.minhasdespesas.repositories.categories
 
 import android.content.Context
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import io.reactivex.Completable
 import io.reactivex.Flowable
 

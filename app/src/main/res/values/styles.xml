@@ -39,6 +39,13 @@
         <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
+    <style name="text_label">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+    </style>
+
     <style name="text_regular">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>

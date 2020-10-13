@@ -1,22 +1,22 @@
-package com.geanbrandao.minhasdespesas.modal.database.entity_categories
+package com.geanbrandao.minhasdespesas.model.database.entity_categories
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.geanbrandao.minhasdespesas.R
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData.Companion.TABLE_NAME
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData.Companion.TABLE_NAME
+import java.util.*
 
 @Entity(tableName = TABLE_NAME)
 class CategoriesData(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = ID)
-    val id: Long,
+    val id: String,
 
     @ColumnInfo(name = NAME)
     val name: String,
 
     @ColumnInfo(name = ICON)
-    val icon: Int = R.drawable.ic_tag,
+    val icon: String = "ic_tag",
 
     @ColumnInfo(name = CAN_REMOVE)
     val canRemove: Boolean = false

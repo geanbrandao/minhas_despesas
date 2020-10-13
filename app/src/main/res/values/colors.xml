@@ -10,10 +10,13 @@
 
 
     <color name="colorGray">#979797</color>
+    <color name="colorGrayLight">#C1C1C1</color>
+
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTextLight">#FFFFFF</color>
     <color name="colorBackground">#f4f4f4</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorError">#FF0000</color>
 
 
 </resources>

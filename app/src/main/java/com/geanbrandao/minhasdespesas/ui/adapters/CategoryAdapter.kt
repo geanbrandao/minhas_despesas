@@ -4,17 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.geanbrandao.minhasdespesas.R
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.getIconFromString
+import com.geanbrandao.minhasdespesas.model.Category
 import kotlinx.android.synthetic.main.item_category.view.*
 
-class CategoriesAdapter(
-        private val context: Context,
-        private val data: ArrayList<CategoriesData> = arrayListOf()
-) : RecyclerView.Adapter<CategoriesAdapter.MyViewHolder>() {
+class CategoryAdapter(
+    private val context: Context,
+    private val onCheckedChange: ((item: Category, isChecked: Boolean) -> Unit),
+    private val onClick: ((item: Category) -> Unit),
+    private val data: ArrayList<Category> = arrayListOf()
+) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false)
@@ -26,6 +29,17 @@ class CategoriesAdapter(
         val item = data[position]
 
         holder.bindView(item)
+
+        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            onCheckedChange.invoke(item, isChecked)
+            data[position].isSelected = isChecked
+        }
+
+        holder.category.setOnClickListener {
+            if (item.canRemove) {
+                onClick.invoke(item)
+            }
+        }
     }
 
     override fun getItemCount() = data.count()
@@ -35,27 +49,27 @@ class CategoriesAdapter(
         notifyDataSetChanged()
     }
 
-    fun addAll(data: ArrayList<CategoriesData>) {
+    fun addAll(data: ArrayList<Category>) {
         this.data.addAll(data)
         notifyDataSetChanged()
     }
 
-    fun add(data: CategoriesData) {
+    fun add(data: Category) {
         this.data.add(data)
         notifyDataSetChanged()
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val category = itemView.text_category as AppCompatTextView
+        val checkbox = itemView.checkbox_category as AppCompatCheckBox
 
-        fun bindView(item: CategoriesData) {
+        private val context = itemView.context
+
+        fun bindView(item: Category) {
             category.text = item.name
-            val icon = ContextCompat.getDrawable(itemView.context, item.icon)!!
-            val h: Int = icon.intrinsicHeight
-            val w: Int = icon.intrinsicWidth
-            icon.setBounds(0, 0, w, h)
-            icon.setTint(ContextCompat.getColor(itemView.context, R.color.colorAccent))
+            val icon = context.getIconFromString(item.icon, R.color.colorAccent)
             category.setCompoundDrawablesRelative(icon, null, null, null)
+            checkbox.isChecked = item.isSelected
         }
     }
 }

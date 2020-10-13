@@ -3,13 +3,14 @@ package com.geanbrandao.minhasdespesas.ui.splash_screen
 import android.os.Bundle
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.goToActivity
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
 import com.geanbrandao.minhasdespesas.ui.home.HomeActivity
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.util.*
 
 class SplashScreenActivity : BaseActivity() {
 
@@ -50,17 +51,17 @@ class SplashScreenActivity : BaseActivity() {
 
     private fun createCategories() {
         val list: List<CategoriesData> = listOf(
-                CategoriesData(0, "Casa", R.drawable.ic_house, false),
-                CategoriesData(0, "Educação", R.drawable.ic_education, false),
-                CategoriesData(0, "Eletrônicos", R.drawable.ic_computer, false),
-                CategoriesData(0, "Outros", R.drawable.ic_others, false),
-                CategoriesData(0, "Restaurante", R.drawable.ic_restaurant, false),
-                CategoriesData(0, "Saúde", R.drawable.ic_healing, false),
-                CategoriesData(0, "Serviços", R.drawable.ic_service, false),
-                CategoriesData(0, "Supermercado", R.drawable.ic_supermarket, false),
-                CategoriesData(0, "Transporte", R.drawable.ic_bus, false),
-                CategoriesData(0, "Vestuário", R.drawable.ic_store, false),
-                CategoriesData(0, "Viagem", R.drawable.ic_bus, false))
+                CategoriesData(UUID.randomUUID().toString(), "Casa", "ic_house", false),
+                CategoriesData(UUID.randomUUID().toString(), "Educação", "ic_education", false),
+                CategoriesData(UUID.randomUUID().toString(), "Eletrônicos", "ic_computer", false),
+                CategoriesData(UUID.randomUUID().toString(), "Outros", "ic_others", false),
+                CategoriesData(UUID.randomUUID().toString(), "Restaurante", "ic_restaurant", false),
+                CategoriesData(UUID.randomUUID().toString(), "Saúde", "ic_healing", false),
+                CategoriesData(UUID.randomUUID().toString(), "Serviços", "ic_service", false),
+                CategoriesData(UUID.randomUUID().toString(), "Supermercado", "ic_supermarket", false),
+                CategoriesData(UUID.randomUUID().toString(), "Transporte", "ic_bus", false),
+                CategoriesData(UUID.randomUUID().toString(), "Vestuário", "ic_store", false),
+                CategoriesData(UUID.randomUUID().toString(), "Viagem", "ic_bus", false))
 
         disposableAdd = viewModel.insertAll(this, list).subscribeBy(
                 onError = {

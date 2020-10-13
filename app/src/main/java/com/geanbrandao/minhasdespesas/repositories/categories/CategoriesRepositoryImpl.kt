@@ -1,10 +1,8 @@
 package com.geanbrandao.minhasdespesas.repositories.categories
 
 import android.content.Context
-import androidx.room.Delete
-import androidx.room.Update
-import com.geanbrandao.minhasdespesas.modal.database.MyDatabase
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.model.database.MyDatabase
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers

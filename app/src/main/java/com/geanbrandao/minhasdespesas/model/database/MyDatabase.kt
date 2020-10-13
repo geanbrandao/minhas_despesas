@@ -1,17 +1,17 @@
-package com.geanbrandao.minhasdespesas.modal.database
+package com.geanbrandao.minhasdespesas.model.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.geanbrandao.minhasdespesas.modal.database.converters.Converters
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesDao
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
-import com.geanbrandao.minhasdespesas.modal.database.entity_expense_category_join.ExpenseCategoryJoinDao
-import com.geanbrandao.minhasdespesas.modal.database.entity_expense_category_join.ExpenseCategoryJoinData
-import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesDao
-import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.model.database.converters.Converters
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesDao
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.model.database.entity_expense_category_join.ExpenseCategoryJoinDao
+import com.geanbrandao.minhasdespesas.model.database.entity_expense_category_join.ExpenseCategoryJoinData
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesDao
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
 
 @Database(
     entities = [

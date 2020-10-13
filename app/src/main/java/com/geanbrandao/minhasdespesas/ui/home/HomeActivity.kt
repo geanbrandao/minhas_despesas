@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
 import com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment
-import com.geanbrandao.minhasdespesas.ui.navigation.settings.SettingsFragment
+import com.geanbrandao.minhasdespesas.ui.navigation.settings.fragments.SettingsFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import timber.log.Timber
 

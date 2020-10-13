@@ -14,7 +14,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.goToActivityFoResult
-import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.model.Expense
+import com.geanbrandao.minhasdespesas.model.database.entity_expense_category_join.ExpenseCategoryJoinData
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.showDialogMessage
 import com.geanbrandao.minhasdespesas.ui.add_edit.activity.AddEditActivity
 import com.geanbrandao.minhasdespesas.ui.adapters.ExpensesAdapter
@@ -57,7 +59,6 @@ class HomeFragment : BaseFragment() {
         )
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -104,21 +105,18 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun getExpenses() {
+        resetListExpenses()
         disposableGet = viewModel.getAll(requireContext())
             .subscribeBy(
-                onNext = {
-                    Timber.d("Chamou o onNext = ${it.size}")
-                    adapter.clear()
-                    adapter.addAll(it.toCollection(ArrayList()))
+                onNext = { expense ->
+                    Timber.d("Chamou o onNext = ${expense.toString()}")
+                    adapter.add(expense)
 
-                    amoutSpent = 0f
-                    it.forEach { expense ->
-                        amoutSpent += expense.amount
-                        Timber.d("data - ${expense.toString()}")
-                    }
+                    amoutSpent += expense.amount
+
                     root.text_amount_spent.text = getString(R.string.text_value_money, amoutSpent)
 
-                    countItems = it.size
+                    countItems += 1
                     root.text_count_items.text =
                         getString(R.string.home_fragment_count_spent, countItems)
                 },
@@ -129,7 +127,13 @@ class HomeFragment : BaseFragment() {
             )
     }
 
-    private fun openOptions(item: ExpensesData) {
+    private fun resetListExpenses() {
+        adapter.clear()
+        amoutSpent = 0f
+        countItems = 0
+    }
+
+    private fun openOptions(item: Expense) {
         val view =
             LayoutInflater.from(requireContext()).inflate(R.layout.dialog_options_expense, null)
         val builder = AlertDialog.Builder(requireContext())
@@ -159,16 +163,17 @@ class HomeFragment : BaseFragment() {
         alertDialog.show()
     }
 
-    private fun editItem(item: ExpensesData) {
+    private fun editItem(item: Expense) {
         val intent = Intent(requireActivity(), AddEditActivity::class.java)
         intent.putExtra(EXPENSE_EDIT_KEY, item)
         startActivityForResult(intent, EDIT_ITEM_CODE)
     }
 
-    private fun deleteItem(item: ExpensesData) {
+    private fun deleteItem(item: Expense) {
         disposableDelete = viewModel.deleteExpense(requireContext(), item)
             .doOnSubscribe {
                 showLoader()
+                resetListExpenses()
             }.doFinally {
                 hideLoader()
             }
@@ -179,6 +184,7 @@ class HomeFragment : BaseFragment() {
                 },
                 onComplete = {
                     Timber.d("delete item from database")
+//                    resetListExpenses()
                 }
             )
     }
@@ -187,7 +193,7 @@ class HomeFragment : BaseFragment() {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 ADD_ITEM_CODE -> {
-                    val value = data?.getSerializableExtra("expense") as ExpensesData?
+                    val value = data?.getSerializableExtra("expense") as Expense?
                     value?.let {
                         addItem(it)
                     } ?: run {
@@ -195,7 +201,7 @@ class HomeFragment : BaseFragment() {
                     }
                 }
                 EDIT_ITEM_CODE -> {
-                    val value = data?.getSerializableExtra("expense") as ExpensesData?
+                    val value = data?.getSerializableExtra("expense") as Expense?
                     value?.let {
                         updateItem(it)
                     } ?: run {
@@ -206,8 +212,27 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun updateItem(item: ExpensesData) {
+    private fun updateItem(item: Expense) {
         disposableUpdate = viewModel.updateExpense(requireContext(), item)
+            .doOnSubscribe {
+                showLoader()
+//                resetListExpenses()
+            }.doFinally {
+                hideLoader()
+            }.subscribeBy(
+                onError = {
+                    Timber.e(it)
+                    activity?.showDialogMessage(requireContext().getString(R.string.errors_generic))
+                },
+                onComplete = {
+                    Timber.d("Item edited to database")
+                    resetListExpenses()
+                }
+            )
+    }
+
+    private fun addItem(item: Expense) {
+        disposableAdd = viewModel.addExpense(requireContext(), item)
             .doOnSubscribe {
                 showLoader()
             }.doFinally {
@@ -218,27 +243,20 @@ class HomeFragment : BaseFragment() {
                     activity?.showDialogMessage(requireContext().getString(R.string.errors_generic))
                 },
                 onComplete = {
-                    Timber.d("Item edited to database")
-                    getExpenses()
-                }
-            )
-    }
-
-    private fun addItem(item: ExpensesData) {
-        disposableAdd = viewModel.addExpense(requireContext(), item)
-            .doOnSubscribe {
-                showLoader()
-            }.doFinally {
-                hideLoader()
-            }
-            .subscribeBy(
-                onError = {
-                    Timber.e(it)
-                    activity?.showDialogMessage(requireContext().getString(R.string.errors_generic))
-                },
-                onComplete = {
                     Timber.d("Item added to database")
-                    getExpenses()
+                    val joins = arrayListOf<ExpenseCategoryJoinData>()
+                    item.categories.forEach {
+                        joins.add(ExpenseCategoryJoinData(item.id, it.id))
+                    }
+                    viewModel.insertExpenseCategoryJoin(requireContext(), joins)
+                            .subscribeBy(
+                                    onError = {
+                                        Timber.e(it)
+                                    },
+                                    onComplete = {
+                                        getExpenses()
+                                    }
+                            )
                 }
             )
     }

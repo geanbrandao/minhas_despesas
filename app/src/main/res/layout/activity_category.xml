@@ -59,12 +59,23 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_category"
             android:clipToPadding="false"
-            android:paddingBottom="8dp"
+            android:paddingBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_ok"
             app:layout_constraintTop_toBottomOf="@id/text_create_category"/>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_ok"
+            style="@style/button_enabled_accent"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_marginBottom="32dp"
+            android:stateListAnimator="@null"
+            android:text="@string/buttons_default_ok"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

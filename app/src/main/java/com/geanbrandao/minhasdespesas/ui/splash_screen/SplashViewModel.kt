@@ -2,7 +2,7 @@ package com.geanbrandao.minhasdespesas.ui.splash_screen
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.geanbrandao.minhasdespesas.modal.database.entity_categories.CategoriesData
+import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import com.geanbrandao.minhasdespesas.repositories.categories.CategoriesRepository
 import com.geanbrandao.minhasdespesas.repositories.categories.CategoriesRepositoryImpl
 import io.reactivex.Completable

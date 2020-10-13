@@ -6,8 +6,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
+import android.view.View
 import com.geanbrandao.minhasdespesas.*
-import com.geanbrandao.minhasdespesas.modal.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.model.Category
+import com.geanbrandao.minhasdespesas.model.Expense
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.ui.adapters.CategorySimpleAdapter
 import com.geanbrandao.minhasdespesas.ui.add_edit.AddEditViewModel
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
 import com.geanbrandao.minhasdespesas.ui.category.CategoryActivity
@@ -18,6 +22,7 @@ import kotlinx.android.synthetic.main.component_toolbar.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AddEditActivity : BaseActivity() {
 
@@ -29,21 +34,41 @@ class AddEditActivity : BaseActivity() {
 
     private var date: Date? = null
 
+    private val adapter: CategorySimpleAdapter by lazy {
+        CategorySimpleAdapter(
+            this,
+            {
+                goToSelectCategories(adapter.data)
+            }
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit)
 
+
+        date = Date()
+
         createListeners()
+
+        Timber.d("DATE ${date.toString()}")
 
         savedInstanceState?.let {
 
+
         } ?: run {
-            val item = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as ExpensesData?
+            val item = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as Expense?
             item?.let {
                 input_amount.setText("%.2f".format(item.amount))
                 input_title.setText(item.title)
-                text_date.text = item.date.toStringDateFormated()
+                text_date.text = item.date.toDate()?.toStringDateFormated()
+                date = item.date.toDate()
                 input_description.setText(item.description)
+
+                adapter.addAll(it.categories)
+                recycler_selected_category.visibility = View.VISIBLE
+                text_category.visibility = View.GONE
             }
         }
 
@@ -52,6 +77,8 @@ class AddEditActivity : BaseActivity() {
     private fun createListeners() {
         setupToolbar()
         setupDatePicker()
+
+        recycler_selected_category.adapter = adapter
 
         button_save.setOnClickListener {
             addItem()
@@ -62,7 +89,11 @@ class AddEditActivity : BaseActivity() {
         }
 
         text_category.setOnClickListener {
-            goToActivityFoResult(CategoryActivity::class.java, 123)
+            goToSelectCategories(adapter.data)
+        }
+
+        recycler_selected_category.setOnClickListener {
+            goToSelectCategories(adapter.data)
         }
 
         Selection.setSelection(input_amount.text, input_amount.text!!.length)
@@ -98,15 +129,12 @@ class AddEditActivity : BaseActivity() {
         val year = calendar.get(Calendar.YEAR)
         Timber.d("CELENDAR $year/$month/$day")
 
-        date = formatDateString(year, month+1, day)
-
         text_date.text = date?.toStringDateFormated()
 
         picker = DatePickerDialog(this, { _, y, m, d ->
             Timber.d("$y/$m/$d")
             date = formatDateString(y, m+1, d)
             text_date.text = date?.toStringDateFormated()
-
         }, year, month, day)
     }
 
@@ -114,7 +142,7 @@ class AddEditActivity : BaseActivity() {
 
         intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY)?.let {
             // EDIT
-            val data: ExpensesData = getData()
+            val data: Expense = getData()
             Timber.d("data - ${data.toString()}")
 
             val intent = Intent()
@@ -124,7 +152,7 @@ class AddEditActivity : BaseActivity() {
 
         }?: run {
             // ADD
-            val data: ExpensesData = getData()
+            val data: Expense = getData()
             Timber.d("data - ${data.toString()}")
 
             val intent = Intent()
@@ -136,21 +164,23 @@ class AddEditActivity : BaseActivity() {
 
     }
 
-    private fun getData(): ExpensesData {
+    private fun getData(): Expense {
 
-        val data: ExpensesData? = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as ExpensesData?
+        val data: Expense? = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as Expense?
 
-        val id = data?.let {
-            it.id
-        } ?: run {
-            0
-        }
+        val id = data?.id ?: UUID.randomUUID().toString() // se for editado ja tem id
 
         val title = input_title.text.toString()
         val amount = input_amount.text.toString().replace(",", "").toInt() / 100f
         val description =  input_description.text.toString()
 
-        return ExpensesData(id, amount, title, date ?: Date(), description)
+        return Expense(id, amount, title, date.toString(), description, adapter.data)
+    }
+
+    private fun goToSelectCategories(data: ArrayList<Category>) {
+        val intent = Intent(this, CategoryActivity::class.java)
+        intent.putExtra(SELECTED_CATEGORIES_KEY, data)
+        startActivityForResult(intent, SELECTED_CATEGORIES_CODE)
     }
 
     private fun setupToolbar() {
@@ -162,6 +192,28 @@ class AddEditActivity : BaseActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECTED_CATEGORIES_CODE) {
+                val value = data?.getSerializableExtra(SELECTED_CATEGORIES_KEY) as ArrayList<Category>?
+                value?.let {
+                    if (it.size > 0) {
+                        adapter.clear()
+                        adapter.addAll(it)
+                        recycler_selected_category.visibility = View.VISIBLE
+                        text_category.visibility = View.GONE
+                    } else {
+                        adapter.clear()
+                        recycler_selected_category.visibility = View.GONE
+                        text_category.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+
+    }
+
     private fun stepBefore() {
         finish()
     }
@@ -169,5 +221,10 @@ class AddEditActivity : BaseActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         stepBefore()
+    }
+
+    companion object {
+        const val SELECTED_CATEGORIES_CODE = 1232
+        const val SELECTED_CATEGORIES_KEY = "SELECTED_CATEGORIES_KEY"
     }
 }
