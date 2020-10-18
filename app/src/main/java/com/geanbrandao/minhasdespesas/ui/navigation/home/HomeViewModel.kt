@@ -18,7 +18,7 @@ class HomeViewModel : ViewModel() {
     private val mRepository: ExpensesRepository = ExpensesRepositoryImpl()
     private val mRepositoryCategory: ExpenseCategoryJoinRepository = ExpenseCategoryJoinRepositoryImpl()
 
-    fun getAll(context: Context): Flowable<Expense> {
+    fun getAll(context: Context): Flowable<List<Expense>> {
         return mRepository.getAll(context)
     }
 
@@ -30,11 +30,19 @@ class HomeViewModel : ViewModel() {
         return mRepository.deleteExpense(context, data.mapTo())
     }
 
-    fun updateExpense(context: Context, data: Expense): Completable {
-        return mRepository.updateItem(context, data.mapTo())
+    fun updateExpense(
+            context: Context, data: Expense,
+            joinsRemove: List<ExpenseCategoryJoinData>,
+            joinsAdd: List<ExpenseCategoryJoinData>
+    ): Completable {
+        return mRepository.updateItem(context, data.mapTo(), joinsRemove, joinsAdd)
     }
 
     fun insertExpenseCategoryJoin(context: Context, joins: List<ExpenseCategoryJoinData>): Completable {
         return mRepositoryCategory.insert(context, joins)
+    }
+
+    fun removeExpenseCategoryJoin(context: Context, joins: List<ExpenseCategoryJoinData>): Completable {
+        return mRepositoryCategory.delete(context, joins)
     }
 }

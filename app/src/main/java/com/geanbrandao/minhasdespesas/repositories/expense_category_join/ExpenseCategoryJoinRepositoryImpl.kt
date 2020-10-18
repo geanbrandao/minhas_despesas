@@ -30,4 +30,10 @@ class ExpenseCategoryJoinRepositoryImpl: ExpenseCategoryJoinRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
+    override fun delete(context: Context, joins: List<ExpenseCategoryJoinData>): Completable {
+        return MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao().delete(joins)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 }

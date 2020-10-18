@@ -54,6 +54,8 @@ class CategoryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
+        val categoriesFromIntent = intent.getSerializableExtra(AddEditActivity.SELECTED_CATEGORIES_KEY) as ArrayList<Category>?
+        selectedCategories.addAll(categoriesFromIntent ?: arrayListOf())
 
         savedInstanceState?.let {
             getCategories()
@@ -177,26 +179,24 @@ class CategoryActivity : BaseActivity() {
                     categoriesFromDatabase.add(category.mapTo())
                 }
 
-                categoriesFromDatabase.sortBy { category ->
-                    category.id
-                }
+//                categoriesFromDatabase.sortBy { category ->
+//                    category.id
+//                }
 
-                val categoriesFromIntent =
-                    intent.getSerializableExtra(AddEditActivity.SELECTED_CATEGORIES_KEY) as ArrayList<Category>?
 
                 categoriesFromDatabase.forEach { categoryDB ->
-                    categoriesFromIntent?.forEach { categoryIN ->
+                    selectedCategories.forEach { categoryIN ->
                         // aqui vai subtituir deixar o campo isSelected como selecionado
                         if (categoryDB.id == categoryIN.id) {
                             categoryDB.isSelected = true
                         }
-                        Timber.d("CATEGORY INTENT - $categoryIN")
+//                        Timber.d("CATEGORY INTENT - $categoryIN")
                     }
                 }
-                categoriesFromDatabase.forEach { categoryDB ->
-                    Timber.d("CATEGORY DATABASE - $categoryDB")
-                }
-                selectedCategories.addAll(categoriesFromIntent ?: arrayListOf())
+//                categoriesFromDatabase.forEach { categoryDB ->
+//                    Timber.d("CATEGORY DATABASE - $categoryDB")
+//                }
+//                selectedCategories.addAll(categoriesFromIntent ?: arrayListOf())
                 adapter.addAll(categoriesFromDatabase)
 
             },
@@ -218,6 +218,7 @@ class CategoryActivity : BaseActivity() {
     }
 
     private fun addSelectedCategory(item: Category, isChecked: Boolean) {
+        Timber.d("ADD SELECTED CATEGORY ${item.name} - $isChecked")
         if (isChecked) {
             selectedCategories.add(item)
         } else {

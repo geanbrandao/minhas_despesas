@@ -66,9 +66,11 @@ class AddEditActivity : BaseActivity() {
                 date = item.date.toDate()
                 input_description.setText(item.description)
 
-                adapter.addAll(it.categories)
-                recycler_selected_category.visibility = View.VISIBLE
-                text_category.visibility = View.GONE
+                if (it.categories.size > 0) {
+                    adapter.addAll(it.categories)
+                    recycler_selected_category.visibility = View.VISIBLE
+                    text_category.visibility = View.GONE
+                }
             }
         }
 
@@ -199,6 +201,7 @@ class AddEditActivity : BaseActivity() {
                 val value = data?.getSerializableExtra(SELECTED_CATEGORIES_KEY) as ArrayList<Category>?
                 value?.let {
                     if (it.size > 0) {
+                        it.forEach { Timber.d("NOME DA CATEGORIA - ${it.name}") }
                         adapter.clear()
                         adapter.addAll(it)
                         recycler_selected_category.visibility = View.VISIBLE

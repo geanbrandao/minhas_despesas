@@ -15,4 +15,6 @@ class Expense(
     override fun toString(): String {
         return "$id - $amount $title - $date - $date - $description ${categories.toString()}"
     }
+
+    constructor(): this("", 0f, "", "", "", arrayListOf())
 }

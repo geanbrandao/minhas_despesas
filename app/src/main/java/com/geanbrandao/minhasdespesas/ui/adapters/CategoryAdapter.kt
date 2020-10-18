@@ -30,7 +30,10 @@ class CategoryAdapter(
 
         holder.bindView(item)
 
-        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+        holder.checkbox.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if(!compoundButton.isPressed) {
+                return@setOnCheckedChangeListener
+            }
             onCheckedChange.invoke(item, isChecked)
             data[position].isSelected = isChecked
         }

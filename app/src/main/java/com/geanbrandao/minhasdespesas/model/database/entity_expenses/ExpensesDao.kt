@@ -3,6 +3,7 @@ package com.geanbrandao.minhasdespesas.model.database.entity_expenses
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface ExpensesDao {
@@ -12,6 +13,9 @@ interface ExpensesDao {
 
     @Query("SELECT * FROM ${ExpensesData.TABLE_NAME} ORDER BY date DESC")
     fun getAll(): Flowable<List<ExpensesData>>
+
+    @Query("SELECT * FROM ${ExpensesData.TABLE_NAME} ORDER BY date DESC")
+    fun getAllSingle(): Single<List<ExpensesData>>
 
     @Delete
     fun delete(data: ExpensesData): Completable

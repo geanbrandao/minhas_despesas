@@ -23,6 +23,9 @@ import com.geanbrandao.minhasdespesas.model.Category
 import com.geanbrandao.minhasdespesas.model.Expense
 import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.Single
 import kotlinx.android.synthetic.main.dialog_error.view.*
 import kotlinx.android.synthetic.main.dialog_error.view.action_ok
 import kotlinx.android.synthetic.main.dialog_error.view.text_message
@@ -182,5 +185,26 @@ fun AppCompatTextView.setHtmlText(message: String) {
         this.text = Html.fromHtml(message, Html.FROM_HTML_MODE_COMPACT)
     } else {
         this.text = Html.fromHtml(message)
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T> Iterable<Single<T>>.zip() =
+        Single.zip(this) { array -> array.map { it as T } }
+
+@Suppress("UNCHECKED_CAST")
+fun <T> Iterable<Flowable<T>>.combineLatest() =
+        Flowable.combineLatest(this) { array -> array.map { it as T } }
+
+
+fun List<Category>.filterById(elements: List<Category>): List<Category> {
+
+    if (this.isEmpty()) {
+        return emptyList()
+    }
+
+    val elemetsById = elements.map { it.id }
+    return this.filterNot {
+        it.id in elemetsById
     }
 }

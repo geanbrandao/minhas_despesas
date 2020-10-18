@@ -42,6 +42,10 @@ class ExpenseCategoryJoinData(
 
 ) {
 
+    override fun toString(): String {
+        return "$expenseId - $categoryId"
+    }
+
     companion object {
         const val TABLE_NAME = "expense_category_join"
         const val EXPENSE_ID = "expense_id"

@@ -10,4 +10,5 @@ interface ExpenseCategoryJoinRepository {
     fun insert(context: Context, join: ExpenseCategoryJoinData): Completable
     fun insert(context: Context, joins: List<ExpenseCategoryJoinData>): Completable
     fun getCategoriesByExpenseId(context: Context, expenseId: String): Single<List<CategoriesData>>
+    fun delete(context: Context, joins: List<ExpenseCategoryJoinData>): Completable
 }

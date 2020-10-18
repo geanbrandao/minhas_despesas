@@ -1,45 +1,112 @@
 package com.geanbrandao.minhasdespesas.repositories.expenses
 
 import android.content.Context
+import com.geanbrandao.minhasdespesas.combineLatest
 import com.geanbrandao.minhasdespesas.mapTo
-import com.geanbrandao.minhasdespesas.model.Category
 import com.geanbrandao.minhasdespesas.model.Expense
 import com.geanbrandao.minhasdespesas.model.database.MyDatabase
 import com.geanbrandao.minhasdespesas.model.database.entity_expense_category_join.ExpenseCategoryJoinData
 import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
+import com.geanbrandao.minhasdespesas.zip
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.concatAll
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.Android
 import timber.log.Timber
+
 
 class ExpensesRepositoryImpl : ExpensesRepository {
 
-    override fun getAll(context: Context): Flowable<Expense> {
+//    override fun getAll(context: Context): Flowable<List<Expense>> {
+//        return MyDatabase.getDatabaseInstance(context)
+//                .expensesDao().getAll()
+//                .flatMap { list -> Flowable.fromIterable(list) }
+//                .map { expenseData ->
+//                    MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
+//                            .getCategoriesByExpenseId(expenseData.id)
+//                            .map {
+//                                Timber.d("SIZE - ${it.size}")
+//                                expenseData.mapTo(it)
+//                            }
+//                }.flatMap { categoriesData ->
+//                    Timber.d("CATEGORIES DATA")
+//                    categoriesData.toFlowable()
+//                }.toList().toFlowable()
+////                .map {
+////                    it.map { ed ->
+////                        ed.mapTo(arrayListOf())
+////                    }
+////                }
+//                .map {
+//                    Timber.d("SIZE - ${it.size}")
+//                    Timber.d("REALMENTE NAO SEI SE TA AQUI - ${it.size}")
+//                    it
+//                }
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//    }
+
+
+    override fun getAll(context: Context): Flowable<List<Expense>> {
         return MyDatabase.getDatabaseInstance(context).expensesDao().getAll()
                 .switchMap {
-                    getJoins(context, it)
-                }.subscribeOn(Schedulers.io())
+                    makeExpenseFlowable(context, it)
+                }
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+
     }
 
-    private fun getJoins(context: Context, listExpensesData: List<ExpensesData>): Flowable<Expense> {
-        val observable = listExpensesData.map { expenseData ->
-            MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao().getCategoriesByExpenseId(expenseData.id)
-                    .map { categoriesDate ->
-                        expenseData.mapTo(categoriesDate)
-                    }
+    private fun makeExpenseFlowable(context: Context, list: List<ExpensesData>): Flowable<List<Expense>> {
+        if(list.isEmpty()) {
+            return Flowable.just(emptyList())
         }
 
-        return observable.concatAll()
+        val flowables = list.map { expensesData ->
+            MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
+                    .flowableByExpenseId(expensesData.id)
+                    .map { categoriesData -> expensesData.mapTo(categoriesData) }
+        }
+
+        return flowables.combineLatest()
     }
 
+
+//    fun getAll2(context: Context): Single<List<Expense>> {
+//        return MyDatabase.getDatabaseInstance(context).expensesDao().getAll()
+//                .flatMap {
+//                    makeExpensesSingle(context, it)
+//                }
+//    }
+//
+//    fun makeExpensesSingle(context: Context, expensesData: List<ExpensesData>): Single<List<Expense>> {
+//        if (expensesData.isEmpty()) {
+//            return Single.just(emptyList())
+//        }
+//
+//        val singles = expensesData.map { ed ->
+//            MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
+//                    .getCategoriesByExpenseId(ed.id)
+//                    .map { categoriesData -> ed.mapTo(categoriesData) }
+//        }
+//
+//        return singles.zip()
+//    }
+
     override fun addExpense(context: Context, data: Expense): Completable {
-        return MyDatabase.getDatabaseInstance(context).expensesDao().insertExpense(data.mapTo())
+
+        val completableA = MyDatabase.getDatabaseInstance(context).expensesDao()
+                .insertExpense(data.mapTo())
+
+        val joins = data.categories.map {
+            ExpenseCategoryJoinData(data.id, it.id)
+        }
+
+        val completableB = MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
+                .insert(joins)
+
+        return completableA.andThen(completableB)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
@@ -50,15 +117,28 @@ class ExpensesRepositoryImpl : ExpensesRepository {
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun updateItem(context: Context, data: ExpensesData): Completable {
-        return MyDatabase.getDatabaseInstance(context).expensesDao().update(data)
+    override fun updateItem(
+            context: Context, data: ExpensesData,
+            joinsRemove: List<ExpenseCategoryJoinData>,
+            joinsAdd: List<ExpenseCategoryJoinData>
+    ): Completable {
+
+        val completableA = MyDatabase.getDatabaseInstance(context).expensesDao()
+                .update(data)
+        val completableB = MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
+                .delete(joinsRemove)
+        val completableC = MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
+                .insert(joinsAdd)
+
+        return completableA.andThen(completableB).andThen(completableC)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun deleteAll(context: Context): Completable {
         return MyDatabase.getDatabaseInstance(context).expensesDao().deleteAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
+
 }
