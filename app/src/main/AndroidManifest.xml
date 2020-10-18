@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.splash_screen.SplashScreenActivity"
+        <activity android:name=".ui.statics.StaticsActivity"></activity>
+        <activity
+            android:name=".ui.splash_screen.SplashScreenActivity"
             android:theme="@style/AppThemeSplash" />
         <activity android:name=".ui.category.CategoryActivity" />
         <activity android:name=".ui.add_edit.activity.AddEditActivity" />

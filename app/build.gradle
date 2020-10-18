@@ -88,4 +88,7 @@ dependencies {
 
     // material
     implementation 'com.google.android.material:material:1.2.1'
+
+    // carousel view
+    implementation "com.synnapps:carouselview:0.1.5"
 }
