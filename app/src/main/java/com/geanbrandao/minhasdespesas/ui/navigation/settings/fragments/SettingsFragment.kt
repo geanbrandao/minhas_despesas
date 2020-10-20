@@ -8,12 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import com.geanbrandao.minhasdespesas.R
-import com.geanbrandao.minhasdespesas.setHtmlText
-import com.geanbrandao.minhasdespesas.showDialogMessage
-import com.geanbrandao.minhasdespesas.showToast
+import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.ui.base.fragment.BaseFragment
 import com.geanbrandao.minhasdespesas.ui.navigation.settings.SettingsViewModel
+import com.geanbrandao.minhasdespesas.ui.statistics.StatisticsActivity
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.dialog_options.view.*
@@ -58,7 +56,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         root.ll_option_statistics.setOnClickListener {
-            activity?.showToast("Em breve")
+            activity?.goToActivity(StatisticsActivity::class.java)
         }
     }
 

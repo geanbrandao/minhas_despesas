@@ -1,2 +1,3 @@
+include ':docs'
 include ':app'
 rootProject.name = "Minhas despesas"

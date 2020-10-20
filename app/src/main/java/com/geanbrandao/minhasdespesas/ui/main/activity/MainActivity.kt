@@ -7,6 +7,7 @@ import com.geanbrandao.minhasdespesas.filterById
 import com.geanbrandao.minhasdespesas.goToActivity
 import com.geanbrandao.minhasdespesas.model.Category
 import com.geanbrandao.minhasdespesas.ui.splash_screen.SplashScreenActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         goToActivity(SplashScreenActivity::class.java)
         finish()
+
+
+        progressbar.max = 250
+        progressbar.progress = 99
 
         /*
         val lastCategory = listOf(
