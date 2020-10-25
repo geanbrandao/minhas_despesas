@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menu_home">
+
+    <fragment
+        android:id="@+id/menu_home"
+        android:name="com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/action_home_fragment_to_settings_fragment"
+            app:destination="@id/menu_settings" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/menu_settings"
+        android:name="com.geanbrandao.minhasdespesas.ui.navigation.settings.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+
+        <action
+            android:id="@+id/action_menu_settings_to_menu_home"
+            app:destination="@id/menu_home" />
+
+    </fragment>
+
+</navigation>

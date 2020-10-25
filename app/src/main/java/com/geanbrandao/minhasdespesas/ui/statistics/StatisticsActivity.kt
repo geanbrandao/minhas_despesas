@@ -57,9 +57,9 @@ class StatisticsActivity : BaseActivity() {
                 null
             )
 
-        val adapter: BarAdapter by lazy {
-            BarAdapter()
-        }
+//        val adapter: BarAdapter by lazy {
+//            BarAdapter()
+//        }
 
         val month = view.text_month as AppCompatTextView
         val recyclerBars = view.recycler_bars as RecyclerView
@@ -69,7 +69,7 @@ class StatisticsActivity : BaseActivity() {
 
 
 
-        view
+        return view
     }
 
 //    fun openWhatsAppConversation(number: String?, message: String?) {

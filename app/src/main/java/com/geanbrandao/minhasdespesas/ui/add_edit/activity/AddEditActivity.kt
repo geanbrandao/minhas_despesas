@@ -145,7 +145,7 @@ class AddEditActivity : BaseActivity() {
         intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY)?.let {
             // EDIT
             val data: Expense = getData()
-            Timber.d("data - ${data.toString()}")
+            Timber.d("data EDIT - ${data.toString()}")
 
             val intent = Intent()
             intent.putExtra("expense", data)
@@ -155,7 +155,7 @@ class AddEditActivity : BaseActivity() {
         }?: run {
             // ADD
             val data: Expense = getData()
-            Timber.d("data - ${data.toString()}")
+            Timber.d("data ADD - ${data.toString()}")
 
             val intent = Intent()
             intent.putExtra("expense", data)
