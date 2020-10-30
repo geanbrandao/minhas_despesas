@@ -4,20 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_previous"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_arrow_left"
+        app:layout_constraintBottom_toBottomOf="@id/text_month"
+        app:layout_constraintEnd_toStartOf="@id/text_month"
+        app:layout_constraintTop_toTopOf="@id/text_month" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_next"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_arrow_right"
+        app:layout_constraintBottom_toBottomOf="@id/text_month"
+        app:layout_constraintStart_toEndOf="@id/text_month"
+        app:layout_constraintTop_toTopOf="@id/text_month" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_month"
         style="@style/text_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="8dp"
-        android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:text="Março"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_arrow_back_left"
+        android:padding="8dp"
         android:textColor="@color/colorBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,21 +45,19 @@
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/image_next"
+        app:layout_constraintStart_toStartOf="@+id/image_previous"
         app:layout_constraintTop_toBottomOf="@+id/text_month" />
 
-<!--    TODO fazer a altura ser dinamica -->
+    <!--    TODO fazer a altura ser dinamica -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_bars_vertical"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:nestedScrollingEnabled="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,14 +69,14 @@
         android:id="@+id/recycler_bars_horizontal"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
         android:clipToPadding="false"
+        android:orientation="vertical"
         android:paddingBottom="32dp"
-        tools:listitem="@layout/item_details_horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler_bars_vertical" />
+        app:layout_constraintTop_toBottomOf="@id/recycler_bars_vertical"
+        tools:listitem="@layout/item_details_horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

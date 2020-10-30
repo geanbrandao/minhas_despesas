@@ -223,7 +223,7 @@ fun AppCompatTextView.setOnCompoudDrawableEndClickListener(onClick: () -> Unit) 
     textView.setOnTouchListener(object : View.OnTouchListener {
         override fun onTouch(v: View?, event: MotionEvent): Boolean {
             if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX <= textView.right - textView.totalPaddingRight) {
+                if (event.rawX >= textView.right - textView.totalPaddingRight) {
                     onClick.invoke()
                     return true
                 }
@@ -231,4 +231,11 @@ fun AppCompatTextView.setOnCompoudDrawableEndClickListener(onClick: () -> Unit) 
             return true
         }
     })
+}
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+fun View.hide() {
+    this.visibility = View.GONE
 }

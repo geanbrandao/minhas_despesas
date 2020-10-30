@@ -14,7 +14,7 @@
         app:progressView_colorBackground="@android:color/transparent"
         app:progressView_progress="0"
         app:progressView_min="0"
-        app:progressView_animation="bounce"
+        app:progressView_animation="normal"
         app:progressView_max="100"
         app:progressView_radius="0dp"
         app:progressView_autoAnimate="true"

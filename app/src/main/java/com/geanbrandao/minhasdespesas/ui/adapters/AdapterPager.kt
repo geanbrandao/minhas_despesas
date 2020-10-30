@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.geanbrandao.minhasdespesas.R
+import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.databinding.PageMonthStatisticsBinding
-import com.geanbrandao.minhasdespesas.setOnCompoudDrawableEndClickListener
-import com.geanbrandao.minhasdespesas.setOnCompoudDrawableStartClickListener
-import com.geanbrandao.minhasdespesas.showToast
 
 class AdapterPager(
     private val context: Context,
+    private val onChangePageClick: ((position: Int) -> Unit),
     private val data: ArrayList<String> = arrayListOf()
 ) : RecyclerView.Adapter<AdapterPager.MyViewHoler>() {
 
@@ -30,6 +28,33 @@ class AdapterPager(
 
         with(holder) {
             bindView(item)
+            when (position) {
+                0 -> {
+                    binding.imagePrevious.hide()
+                    binding.imageNext.show()
+                }
+                data.lastIndex -> {
+                    binding.imagePrevious.show()
+                    binding.imageNext.hide()
+                }
+                else -> {
+                    binding.imagePrevious.show()
+                    binding.imageNext.show()
+                }
+            }
+
+            binding.imageNext.increaseHitArea(20f)
+            binding.imagePrevious.increaseHitArea(20f)
+
+            binding.imageNext.setOnClickListener {
+                context.showToast("NEXT")
+                onChangePageClick.invoke(position + 1)
+            }
+
+            binding.imagePrevious.setOnClickListener {
+                context.showToast("PREVIOUS")
+                onChangePageClick.invoke(position - 1)
+            }
         }
     }
 
@@ -62,20 +87,12 @@ class AdapterPager(
         }
 
         fun bindView(item: String) {
+
             binding.textMonth.text = item
-
-            binding.textMonth.setOnCompoudDrawableEndClickListener {
-                context.showToast("END")
-            }
-
-            binding.textMonth.setOnCompoudDrawableStartClickListener {
-                context.showToast("START")
-            }
 
             setupRecyclerBarsVertical()
             setupRecyclerBarsHorizontal()
         }
-
 
         private fun setupRecyclerBarsVertical() {
             binding.recyclerBarsVertical.adapter = adapterBarsVertical
