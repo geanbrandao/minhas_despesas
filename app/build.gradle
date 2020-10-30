@@ -17,6 +17,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -91,4 +95,7 @@ dependencies {
 
     // carousel view
     implementation "com.synnapps:carouselview:0.1.5"
+
+    // progressview
+    implementation "com.github.skydoves:progressview:1.1.0"
 }

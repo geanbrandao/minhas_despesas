@@ -19,8 +19,8 @@ class MainActivity : AppCompatActivity() {
         finish()
 
 
-        progressbar.max = 250
-        progressbar.progress = 99
+        progressbar.max = 100
+        progressbar.progress = 55
 
         /*
         val lastCategory = listOf(

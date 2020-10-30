@@ -1,5 +1,6 @@
 package com.geanbrandao.minhasdespesas
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.os.Build
 import android.text.Html
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.TouchDelegate
 import android.view.View
 import android.widget.Toast
@@ -24,21 +26,11 @@ import com.geanbrandao.minhasdespesas.model.Expense
 import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
 import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.android.synthetic.main.dialog_error.view.*
-import kotlinx.android.synthetic.main.dialog_error.view.action_ok
-import kotlinx.android.synthetic.main.dialog_error.view.text_message
-import kotlinx.android.synthetic.main.dialog_options.view.*
 import timber.log.Timber
-import java.lang.Exception
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 fun Activity.getScreenWidth(percent: Float): Float {
     val display = windowManager.defaultDisplay
@@ -207,4 +199,36 @@ fun List<Category>.filterById(elements: List<Category>): List<Category> {
     return this.filterNot {
         it.id in elemetsById
     }
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun AppCompatTextView.setOnCompoudDrawableStartClickListener(onClick: () -> Unit) {
+    val textView = this
+    textView.setOnTouchListener(object : View.OnTouchListener {
+        override fun onTouch(v: View?, event: MotionEvent): Boolean {
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX <= textView.totalPaddingLeft) {
+                    onClick.invoke()
+                    return true
+                }
+            }
+            return true
+        }
+    })
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun AppCompatTextView.setOnCompoudDrawableEndClickListener(onClick: () -> Unit) {
+    val textView = this
+    textView.setOnTouchListener(object : View.OnTouchListener {
+        override fun onTouch(v: View?, event: MotionEvent): Boolean {
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX <= textView.right - textView.totalPaddingRight) {
+                    onClick.invoke()
+                    return true
+                }
+            }
+            return true
+        }
+    })
 }

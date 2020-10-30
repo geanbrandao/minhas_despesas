@@ -24,4 +24,7 @@
     <string name="buttons_default_save">Salvar</string>
     <string name="dialog_add_category_text_label">Digite o nome da categoria:</string>
     <string name="dialog_options_category_text_option_delete">Deletar categoria</string>
+    <string name="item_details_text_count_launchs">%d Lançamentos</string>
+    <string name="text_default_value_br">R$ %.2f</string>
+    <string name="text_default_value_percentage">%.1f%%</string>
 </resources>
