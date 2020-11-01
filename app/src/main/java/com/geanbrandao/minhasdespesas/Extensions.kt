@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
@@ -28,6 +29,7 @@ import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesDat
 import io.reactivex.Flowable
 import io.reactivex.Single
 import kotlinx.android.synthetic.main.dialog_error.view.*
+import org.jetbrains.anko.windowManager
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +41,15 @@ fun Activity.getScreenWidth(percent: Float): Float {
     val x = size.x
     return x * percent
 }
+
+fun Context.getScreenHeight(percent: Float): Float {
+    val display = windowManager.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    val y = size.y
+    return y * percent
+}
+
 
 fun Activity.goToActivity(activityClass: Class<*>) = startActivity(Intent(this, activityClass))
 
@@ -117,11 +128,11 @@ fun Activity.showDialogMessage(message: String): AlertDialog {
 }
 
 fun CategoriesData.mapTo(): Category {
-    return Category(this.id, this.name, this.icon, this.canRemove)
+    return Category(this.id, this.name, this.icon, this.canRemove, false, this.colorName)
 }
 
 fun Category.mapTo(): CategoriesData {
-    return CategoriesData(this.id, this.name, this.icon, this.canRemove)
+    return CategoriesData(this.id, this.name, this.icon, this.canRemove, this.colorName)
 }
 
 fun Expense.mapTo(): ExpensesData {
@@ -157,6 +168,18 @@ fun Context.getIconFromString(name: String, colorId: Int): Drawable? {
     return getIcon(resources.getIdentifier(name, "drawable", packageName), colorId)
 }
 
+/**
+ * TODO
+ *
+ * @param name of color
+ * @return int que corresponde ao id da cor
+ */
+fun Context.getColorFromString(name: String): Int {
+    Timber.d("DEBUG1 - $name")
+    return resources.getIdentifier(name, "color", packageName)
+}
+
+
 fun getTimestamp(): String {
     val format = SimpleDateFormat("E MMM d HH:mm:ss zzz yyyy", Locale.getDefault())
     return Date().toString()
@@ -182,11 +205,11 @@ fun AppCompatTextView.setHtmlText(message: String) {
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Iterable<Single<T>>.zip() =
-        Single.zip(this) { array -> array.map { it as T } }
+    Single.zip(this) { array -> array.map { it as T } }
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Iterable<Flowable<T>>.combineLatest() =
-        Flowable.combineLatest(this) { array -> array.map { it as T } }
+    Flowable.combineLatest(this) { array -> array.map { it as T } }
 
 
 fun List<Category>.filterById(elements: List<Category>): List<Category> {
@@ -236,6 +259,16 @@ fun AppCompatTextView.setOnCompoudDrawableEndClickListener(onClick: () -> Unit) 
 fun View.show() {
     this.visibility = View.VISIBLE
 }
+
 fun View.hide() {
     this.visibility = View.GONE
+}
+
+fun Context.getColorNameFromArray(index: Int): String {
+    val array = resources.getStringArray(R.array.colorNames)
+    return array[index]
+}
+
+fun Float.getPercentOfTotal(total: Float): Float {
+    return (this * 100f) / total
 }

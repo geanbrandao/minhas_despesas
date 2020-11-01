@@ -19,7 +19,10 @@ class CategoriesData(
     val icon: String = "ic_tag",
 
     @ColumnInfo(name = CAN_REMOVE)
-    val canRemove: Boolean = false
+    val canRemove: Boolean = false,
+
+    @ColumnInfo(name = COLOR_NAME)
+    val colorName: String,
     ) {
 
     companion object {
@@ -28,5 +31,6 @@ class CategoriesData(
         const val NAME = "name"
         const val ICON = "icon"
         const val CAN_REMOVE = "can_remove"
+        const val COLOR_NAME = "color_name"
     }
 }

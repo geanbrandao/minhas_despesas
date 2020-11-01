@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="48dp"
+    android:layout_width="40dp"
     android:layout_height="200dp"
-    android:layout_marginEnd="2dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.skydoves.progressview.ProgressView
@@ -17,7 +16,7 @@
         app:progressView_animation="normal"
         app:progressView_max="100"
         app:progressView_radius="0dp"
-        app:progressView_autoAnimate="true"
+        app:progressView_autoAnimate="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -98,4 +98,6 @@ dependencies {
 
     // progressview
     implementation "com.github.skydoves:progressview:1.1.0"
+    // circleimageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

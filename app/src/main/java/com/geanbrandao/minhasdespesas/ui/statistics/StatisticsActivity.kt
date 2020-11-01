@@ -1,27 +1,25 @@
 package com.geanbrandao.minhasdespesas.ui.statistics
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.databinding.ActivityStatisticsBinding
+import com.geanbrandao.minhasdespesas.getColorNameFromArray
 import com.geanbrandao.minhasdespesas.increaseHitArea
-import com.geanbrandao.minhasdespesas.showToast
+import com.geanbrandao.minhasdespesas.model.CategoriesExpenses
+import com.geanbrandao.minhasdespesas.model.Category
+import com.geanbrandao.minhasdespesas.model.MonthExpenseReport
 import com.geanbrandao.minhasdespesas.ui.adapters.AdapterPager
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
+import com.geanbrandao.minhasdespesas.utils.RandomColors
+import com.geanbrandao.minhasdespesas.utils.ZoomOutPageTransformer
+import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class StatisticsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityStatisticsBinding
-
-    private val adapter: AdapterPager by lazy {
-        AdapterPager(this,
-            { position ->
-                handlerNextPreviousPage(position)
-            })
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,55 +31,64 @@ class StatisticsActivity : BaseActivity() {
 
     private fun createListeners() {
         setupToolbar()
-        setupRecycler()
+        setupViewPager()
     }
 
     /**
      * make the initial setup for the recycler
      *
      */
-    private fun setupRecycler() {
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(binding.recyclerStatistics)
+    private fun setupViewPager() {
 
-//        binding.recyclerStatistics.layoutManager =
-//            CustomLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
-//                reverseLayout = false,
-//                canScroll = false)
+        val categoriesExpenses: ArrayList<CategoriesExpenses> = arrayListOf(
+            CategoriesExpenses(
+                Category(UUID.randomUUID().toString(), "Casa", "ic_house", false, false, getColorNameFromArray(0)),
+                21.39f,
+                2
+            ),
+            CategoriesExpenses(
+                Category(UUID.randomUUID().toString(), "Educação", "ic_education", false, false, getColorNameFromArray(1)),
+                22.38f,
+                1
+            ),
+            CategoriesExpenses(
+                Category(UUID.randomUUID().toString(), "Outros", "ic_others", false, false, getColorNameFromArray(3)),
+                30.39f,
+                4
+            ),
+            CategoriesExpenses(
+                Category(UUID.randomUUID().toString(), "Supermercado", "ic_supermarket", false, false, getColorNameFromArray(7)),
+                35.39f,
+                2
+            ),
+        )
 
-        binding.recyclerStatistics
+        categoriesExpenses.forEach {
+            Timber.d("COLORS - ${it.category.colorName}")
+        }
 
-        binding.recyclerStatistics.adapter = adapter
-        binding.recyclerStatistics.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        val data: ArrayList<MonthExpenseReport> = arrayListOf(
+            MonthExpenseReport(
+                null,
+                "Mar/2020",
+                categoriesExpenses
+            ),
+            MonthExpenseReport(
+                null,
+                "Abr/2020",
+                categoriesExpenses
+            ),
+            MonthExpenseReport(
+                null,
+                "Mai/2020",
+                categoriesExpenses
+            ),
+        )
 
-        })
-
-        // just for now
-        adapter.addAll(arrayListOf("Março", "Abril", "Maio", "Março", "Abril", "Maio"))
-
-    }
-
-    /**
-     * Handles clicks to change the current showing page in the recycler
-     *
-     * @param position - positon to scroll
-     */
-    private fun handlerNextPreviousPage(position: Int) {
-//        binding.recyclerStatistics.layoutManager =
-//            CustomLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
-//                reverseLayout = false,
-//                canScroll = true)
-
-        showToast("POSITION $position")
-        binding.recyclerStatistics.post(Runnable {
-            binding.recyclerStatistics.smoothScrollToPosition(position)
-        })
-
-//        binding.recyclerStatistics.layoutManager =
-//            CustomLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
-//                reverseLayout = false,
-//                canScroll = false)
-
+        val adapter = AdapterPager(this, data)
+        Timber.d("DEBUG1 - adaper size - ${adapter.itemCount}")
+        binding.viewPager.adapter = adapter
+        binding.viewPager.setPageTransformer(ZoomOutPageTransformer())
     }
 
     private fun setupToolbar() {

@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.filterById
 import com.geanbrandao.minhasdespesas.goToActivity
+import com.geanbrandao.minhasdespesas.model.CategoriesExpenses
 import com.geanbrandao.minhasdespesas.model.Category
+import com.geanbrandao.minhasdespesas.showDialogMessage
 import com.geanbrandao.minhasdespesas.ui.splash_screen.SplashScreenActivity
+import com.geanbrandao.minhasdespesas.utils.RandomColors
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -18,6 +21,36 @@ class MainActivity : AppCompatActivity() {
         goToActivity(SplashScreenActivity::class.java)
         finish()
 
+//        val categoriesExpenses: ArrayList<CategoriesExpenses> = arrayListOf(
+//            CategoriesExpenses(
+//                Category("1", "Casa", "ic_house", false, false),
+//                RandomColors().color,
+//                21.39f,
+//                2
+//            ),
+//            CategoriesExpenses(
+//                Category("1", "Educação", "ic_education", false, false),
+//                RandomColors().color,
+//                22.38f,
+//                1
+//            ),
+//            CategoriesExpenses(
+//                Category("1", "Outros", "ic_others", false, false),
+//                RandomColors().color,
+//                30.39f,
+//                4
+//            ),
+//            CategoriesExpenses(
+//                Category("1", "Supermercado", "ic_supermarket", false, false),
+//                RandomColors().color,
+//                35.39f,
+//                2
+//            ),
+//        )
+//
+//        showDialogMessage("MAX - ${categoriesExpenses.maxOf {
+//            it.valueSpentCategory
+//        }}")
 
         progressbar.max = 100
         progressbar.progress = 55

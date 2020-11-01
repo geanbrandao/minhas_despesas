@@ -139,7 +139,12 @@ class CategoryActivity : BaseActivity() {
 
     private fun addCategory(category: String) {
         disposableAdd = viewModel.insert(this,
-                CategoriesData(UUID.randomUUID().toString(), category, "ic_tag", true))
+                CategoriesData(UUID.randomUUID().toString(),
+                    category,
+                    "ic_tag",
+                    true,
+                    getColorNameFromArray(adapter.itemCount)
+                ))
             .doOnSubscribe {
                 showLoader()
             }.doFinally {

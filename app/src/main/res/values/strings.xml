@@ -26,5 +26,34 @@
     <string name="dialog_options_category_text_option_delete">Deletar categoria</string>
     <string name="item_details_text_count_launchs">%d Lançamentos</string>
     <string name="text_default_value_br">R$ %.2f</string>
-    <string name="text_default_value_percentage">%.1f%%</string>
+    <string name="text_default_value_percentage">%.3f%%</string>
+
+
+<!--    Array color names -->
+    <string-array name="colorNames">
+        <item>green</item>
+        <item>dark_red</item>
+        <item>medium_blue</item>
+        <item>light_green</item>
+        <item>saddle_brown</item>
+        <item>dark_magenta</item>
+        <item>dark_blue</item>
+        <item>blue_violet</item>
+        <item>olive</item>
+        <item>purple</item>
+        <item>maroon</item>
+        <item>dark_green</item>
+        <item>aquamarine</item>
+        <item>chartreuse</item>
+        <item>olive_drab</item>
+        <item>indigo</item>
+        <item>medium_turquoise</item>
+        <item>dark_slate_blue</item>
+        <item>royal_blue</item>
+        <item>medium_sea_green</item>
+        <item>lime_green</item>
+        <item>dark_slate_gray</item>
+        <item>forest_green</item>
+        <item>midnight_blue</item>
+    </string-array>
 </resources>
