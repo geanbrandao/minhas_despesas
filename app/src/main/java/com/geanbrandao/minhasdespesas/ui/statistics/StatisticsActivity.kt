@@ -1,23 +1,31 @@
 package com.geanbrandao.minhasdespesas.ui.statistics
 
 import android.os.Bundle
-import com.geanbrandao.minhasdespesas.R
+import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.databinding.ActivityStatisticsBinding
-import com.geanbrandao.minhasdespesas.getColorNameFromArray
-import com.geanbrandao.minhasdespesas.increaseHitArea
 import com.geanbrandao.minhasdespesas.model.CategoriesExpenses
 import com.geanbrandao.minhasdespesas.model.Category
+import com.geanbrandao.minhasdespesas.model.Expense
 import com.geanbrandao.minhasdespesas.model.MonthExpenseReport
+import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.adapters.AdapterPager
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
 import com.geanbrandao.minhasdespesas.utils.RandomColors
 import com.geanbrandao.minhasdespesas.utils.ZoomOutPageTransformer
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class StatisticsActivity : BaseActivity() {
+
+    private val viewModel: StatisticsViewModel by viewModel()
+
+    private var disposable: Disposable? = null
 
     private lateinit var binding: ActivityStatisticsBinding
 
@@ -32,6 +40,45 @@ class StatisticsActivity : BaseActivity() {
     private fun createListeners() {
         setupToolbar()
         setupViewPager()
+    }
+
+    private fun getExpensesBetween() {
+        // vai pegar os cadastrados a data atual sempre
+        val startMonthDate: OffsetDateTime = OffsetDateTime.now()
+        // define como 6 meses antas
+        val endMonthDate: OffsetDateTime = startMonthDate.minusMonths(6).withDayOfMonth(1)
+        // Primeira coisa buscar as despesas dos ultimos 6 meses
+        disposable = viewModel.getExpensesBetween(this, startMonthDate, endMonthDate)
+            .subscribeBy(
+                onNext = {
+                    generateReport(it)
+                },
+                onError = {
+                    Timber.e(it)
+                },
+                onComplete = {}
+            )
+    }
+
+    private fun generateReport(expenses: List<Expense>) {
+        val data: ArrayList<MonthExpenseReport> = arrayListOf()
+        expenses.forEach { expense ->
+            val cateforiesExpenses: ArrayList<CategoriesExpenses> = arrayListOf()
+            expense.categories.forEach { category ->
+                cateforiesExpenses.add(
+                    CategoriesExpenses(
+                        category,
+
+                    )
+                )
+            }
+
+            data.add(
+                MonthExpenseReport(
+                    expense.selectedDate,
+                    expense.selectedDate.getMonth3LettersName().plus("/").plus(expense.selectedDate.getYearNumber())
+                ))
+        }
     }
 
     /**

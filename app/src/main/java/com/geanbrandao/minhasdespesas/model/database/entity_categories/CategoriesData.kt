@@ -25,6 +25,8 @@ class CategoriesData(
     val colorName: String,
     ) {
 
+    // categoria nao vai ter updatedAt e created, pois sera ordenada pelo nome
+
     companion object {
         const val TABLE_NAME = "category"
         const val ID = "id"

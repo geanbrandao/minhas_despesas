@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
@@ -32,6 +31,11 @@ import kotlinx.android.synthetic.main.dialog_error.view.*
 import org.jetbrains.anko.windowManager
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 fun Activity.getScreenWidth(percent: Float): Float {
@@ -58,15 +62,21 @@ fun Activity.goToActivityFoResult(activityClass: Class<*>, requestCode: Int) {
     startActivityForResult(intent, requestCode)
 }
 
-fun Date.getMonth3LettersName(): String = SimpleDateFormat("MMM", Locale.getDefault()).format(this)
+fun OffsetDateTime.getYearNumber(): String =
+    DateTimeFormatter.ofPattern("yyyy", Locale.getDefault()).format(this)
 
-fun Date.getDayNumber(): String = SimpleDateFormat("dd", Locale.getDefault()).format(this)
+fun OffsetDateTime.getMonth3LettersName(): String =
+    DateTimeFormatter.ofPattern("MMM", Locale.getDefault()).format(this)
 
-fun Date.getMonthName(): String =
-    SimpleDateFormat("MMMM", Locale.getDefault()).format(this)
 
-fun Date.getDayName(): String =
-    SimpleDateFormat("EEEE", Locale.getDefault()).format(this)
+fun OffsetDateTime.getDayNumber(): String =
+    DateTimeFormatter.ofPattern("dd", Locale.getDefault()).format(this)
+
+fun OffsetDateTime.getMonthName(): String =
+    DateTimeFormatter.ofPattern("MMMM", Locale.getDefault()).format(this)
+
+fun OffsetDateTime.getDayName(): String =
+        DateTimeFormatter.ofPattern("EEEE", Locale.getDefault()).format(this)
 
 fun View.increaseHitArea(dp: Float) {
     // increase the hit area
@@ -87,23 +97,31 @@ fun View.increaseHitArea(dp: Float) {
     }
 }
 
-fun Activity.formatDateString(year: Int, month: Int, day: Int): Date? {
-    return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse("$day/$month/$year")
+fun Activity.formatDateString(year: Int, month: Int, day: Int): OffsetDateTime {
+    return OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC)
 }
 
-fun Date.toStringDateFormated(): String {
+fun OffsetDateTime.toStringDateFormated(): String {
     val builder = StringBuilder()
-    builder.append(this.getDayName().capitalize())
+    builder.append(this.getDayName().capitalize(Locale.getDefault()))
     builder.append(", ")
     builder.append(this.getDayNumber())
     builder.append(" de ")
-    builder.append(this.getMonthName().capitalize())
+    builder.append(this.getMonthName().capitalize(Locale.getDefault()))
     return builder.toString()
+}
+
+fun Int.toTwoDigits(): String {
+    if (this < 10) {
+        return "0".plus(this)
+    }
+
+    return this.toString()
 }
 
 fun Activity.showDialogMessage(message: String): AlertDialog {
     val dialogView =
-        LayoutInflater.from(this).inflate(R.layout.dialog_error, null)
+            LayoutInflater.from(this).inflate(R.layout.dialog_error, null)
     val builder = AlertDialog.Builder(this)
     builder.setView(dialogView)
     val alertDialog = builder.create()
@@ -136,7 +154,15 @@ fun Category.mapTo(): CategoriesData {
 }
 
 fun Expense.mapTo(): ExpensesData {
-    return ExpensesData(this.id, this.amount, this.title, this.date, this.description)
+    return ExpensesData(
+        id = this.id,
+        amount = this.amount,
+        title = this.title,
+        selectedDate = this.selectedDate,
+        description = this.description,
+        createdAt = OffsetDateTime.now(),
+        updatedAt = OffsetDateTime.now()
+    )
 }
 
 fun ExpensesData.mapTo(list: List<CategoriesData>): Expense {
@@ -144,7 +170,16 @@ fun ExpensesData.mapTo(list: List<CategoriesData>): Expense {
     list.forEach {
         categories.add(it.mapTo())
     }
-    return Expense(this.id, this.amount, this.title, this.date, this.description, categories)
+    return Expense(
+        id = this.id,
+        amount = this.amount,
+        title = this.title,
+        selectedDate = this.selectedDate,
+        description = this.description,
+        categories = categories,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
+    )
 }
 
 fun Context.showToast(message: String) {
@@ -205,11 +240,11 @@ fun AppCompatTextView.setHtmlText(message: String) {
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Iterable<Single<T>>.zip() =
-    Single.zip(this) { array -> array.map { it as T } }
+        Single.zip(this) { array -> array.map { it as T } }
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Iterable<Flowable<T>>.combineLatest() =
-    Flowable.combineLatest(this) { array -> array.map { it as T } }
+        Flowable.combineLatest(this) { array -> array.map { it as T } }
 
 
 fun List<Category>.filterById(elements: List<Category>): List<Category> {

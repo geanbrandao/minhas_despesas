@@ -7,6 +7,7 @@ import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesDat
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.time.OffsetDateTime
 
 interface ExpensesRepository {
     fun getAll(context: Context): Flowable<List<Expense>>
@@ -14,4 +15,5 @@ interface ExpensesRepository {
     fun deleteExpense(context: Context, data: ExpensesData): Completable
     fun updateItem(context: Context, data: ExpensesData, joinsRemove: List<ExpenseCategoryJoinData>, joinsAdd: List<ExpenseCategoryJoinData>): Completable
     fun deleteAll(context: Context): Completable
+    fun getExpensesBetween(context: Context, startMontDate: OffsetDateTime, endMonthDate: OffsetDateTime): Flowable<List<Expense>>
 }

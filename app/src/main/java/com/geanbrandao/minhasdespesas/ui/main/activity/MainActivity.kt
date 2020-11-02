@@ -1,17 +1,16 @@
 package com.geanbrandao.minhasdespesas.ui.main.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.geanbrandao.minhasdespesas.R
-import com.geanbrandao.minhasdespesas.filterById
-import com.geanbrandao.minhasdespesas.goToActivity
+import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.model.CategoriesExpenses
 import com.geanbrandao.minhasdespesas.model.Category
-import com.geanbrandao.minhasdespesas.showDialogMessage
 import com.geanbrandao.minhasdespesas.ui.splash_screen.SplashScreenActivity
 import com.geanbrandao.minhasdespesas.utils.RandomColors
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
+import java.time.OffsetDateTime
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +19,13 @@ class MainActivity : AppCompatActivity() {
 
         goToActivity(SplashScreenActivity::class.java)
         finish()
+
+        // vai pegar os cadastrados a data atual sempre
+        val startMonthDate: OffsetDateTime = OffsetDateTime.now()
+        // define como 6 meses antas
+        val endMonthDate: OffsetDateTime = startMonthDate.minusMonths(5).withDayOfMonth(1)
+
+//        showDialogMessage(startMonthDate.toStringDateFormated() + "\n" + endMonthDate.toStringDateFormated())
 
 //        val categoriesExpenses: ArrayList<CategoriesExpenses> = arrayListOf(
 //            CategoriesExpenses(

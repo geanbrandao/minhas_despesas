@@ -4,6 +4,7 @@ import android.content.Context
 import com.geanbrandao.minhasdespesas.combineLatest
 import com.geanbrandao.minhasdespesas.mapTo
 import com.geanbrandao.minhasdespesas.model.Expense
+import com.geanbrandao.minhasdespesas.model.MonthExpenseReport
 import com.geanbrandao.minhasdespesas.model.database.MyDatabase
 import com.geanbrandao.minhasdespesas.model.database.entity_expense_category_join.ExpenseCategoryJoinData
 import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
@@ -14,38 +15,20 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.time.OffsetDateTime
 
 
 class ExpensesRepositoryImpl : ExpensesRepository {
 
-//    override fun getAll(context: Context): Flowable<List<Expense>> {
-//        return MyDatabase.getDatabaseInstance(context)
-//                .expensesDao().getAll()
-//                .flatMap { list -> Flowable.fromIterable(list) }
-//                .map { expenseData ->
-//                    MyDatabase.getDatabaseInstance(context).expenseCategoryJoinDao()
-//                            .getCategoriesByExpenseId(expenseData.id)
-//                            .map {
-//                                Timber.d("SIZE - ${it.size}")
-//                                expenseData.mapTo(it)
-//                            }
-//                }.flatMap { categoriesData ->
-//                    Timber.d("CATEGORIES DATA")
-//                    categoriesData.toFlowable()
-//                }.toList().toFlowable()
-////                .map {
-////                    it.map { ed ->
-////                        ed.mapTo(arrayListOf())
-////                    }
-////                }
-//                .map {
-//                    Timber.d("SIZE - ${it.size}")
-//                    Timber.d("REALMENTE NAO SEI SE TA AQUI - ${it.size}")
-//                    it
-//                }
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//    }
+    override fun getExpensesBetween(context: Context, startMontDate: OffsetDateTime, endMonthDate: OffsetDateTime): Flowable<List<Expense>> {
+        return MyDatabase.getDatabaseInstance(context)
+            .expensesDao().getExpensesBetween(startMontDate, endMonthDate)
+            .switchMap {
+                makeExpenseFlowable(context, it)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
 
     override fun getAll(context: Context): Flowable<List<Expense>> {

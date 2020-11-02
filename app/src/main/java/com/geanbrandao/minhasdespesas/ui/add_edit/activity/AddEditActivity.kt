@@ -10,7 +10,6 @@ import android.view.View
 import com.geanbrandao.minhasdespesas.*
 import com.geanbrandao.minhasdespesas.model.Category
 import com.geanbrandao.minhasdespesas.model.Expense
-import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
 import com.geanbrandao.minhasdespesas.ui.adapters.CategorySimpleAdapter
 import com.geanbrandao.minhasdespesas.ui.add_edit.AddEditViewModel
 import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
@@ -21,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_add_edit.*
 import kotlinx.android.synthetic.main.component_toolbar.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -32,14 +32,14 @@ class AddEditActivity : BaseActivity() {
 
     private lateinit var picker: DatePickerDialog
 
-    private var date: Date? = null
+    private var date: OffsetDateTime? = null
 
     private val adapter: CategorySimpleAdapter by lazy {
         CategorySimpleAdapter(
-            this,
-            {
-                goToSelectCategories(adapter.data)
-            }
+                this,
+                {
+                    goToSelectCategories(adapter.data)
+                }
         )
     }
 
@@ -48,7 +48,7 @@ class AddEditActivity : BaseActivity() {
         setContentView(R.layout.activity_add_edit)
 
 
-        date = Date()
+        date = OffsetDateTime.now()
 
         createListeners()
 
@@ -62,8 +62,8 @@ class AddEditActivity : BaseActivity() {
             item?.let {
                 input_amount.setText("%.2f".format(item.amount))
                 input_title.setText(item.title)
-                text_date.text = item.date.toDate()?.toStringDateFormated()
-                date = item.date.toDate()
+                text_date.text = item.selectedDate.toStringDateFormated()
+                date = item.selectedDate
                 input_description.setText(item.description)
 
                 if (it.categories.size > 0) {
@@ -109,9 +109,9 @@ class AddEditActivity : BaseActivity() {
                 query?.let {
                     input_amount.removeTextChangedListener(this)
                     val clearText = it.toString().replace(" ", "")
-                        .replace(".", "")
-                        .replace(",", "")
-                        .replace("-", "")
+                            .replace(".", "")
+                            .replace(",", "")
+                            .replace("-", "")
                     val parsed = clearText.toDouble() / 100f
                     val formatted = "%.2f".format(parsed.toFloat())
                     input_amount.setText(formatted)
@@ -135,7 +135,7 @@ class AddEditActivity : BaseActivity() {
 
         picker = DatePickerDialog(this, { _, y, m, d ->
             Timber.d("$y/$m/$d")
-            date = formatDateString(y, m+1, d)
+            date = formatDateString(y, m + 1, d)
             text_date.text = date?.toStringDateFormated()
         }, year, month, day)
     }
@@ -152,7 +152,7 @@ class AddEditActivity : BaseActivity() {
             setResult(RESULT_OK, intent)
             finish()
 
-        }?: run {
+        } ?: run {
             // ADD
             val data: Expense = getData()
             Timber.d("data - ${data.toString()}")
@@ -174,9 +174,23 @@ class AddEditActivity : BaseActivity() {
 
         val title = input_title.text.toString()
         val amount = input_amount.text.toString().replace(",", "").toInt() / 100f
-        val description =  input_description.text.toString()
+        val description = input_description.text.toString()
 
-        return Expense(id, amount, title, date.toString(), description, adapter.data)
+        val selectedDate = date ?: OffsetDateTime.now()
+
+        val createdAt = data?.createdAt ?: OffsetDateTime.now()
+        val updatedAt = data?.updatedAt ?: OffsetDateTime.now()
+
+        return Expense(
+                id = id,
+                amount = amount,
+                title = title,
+                selectedDate = selectedDate,
+                description = description,
+                categories = adapter.data,
+                createdAt = createdAt,
+                updatedAt = updatedAt
+        )
     }
 
     private fun goToSelectCategories(data: ArrayList<Category>) {

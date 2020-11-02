@@ -10,8 +10,6 @@ import com.geanbrandao.minhasdespesas.R
 import com.geanbrandao.minhasdespesas.getDayNumber
 import com.geanbrandao.minhasdespesas.getMonth3LettersName
 import com.geanbrandao.minhasdespesas.model.Expense
-import com.geanbrandao.minhasdespesas.model.database.entity_expenses.ExpensesData
-import com.geanbrandao.minhasdespesas.toDate
 import kotlinx.android.synthetic.main.item_expense.view.*
 
 class ExpensesAdapter (
@@ -64,8 +62,8 @@ class ExpensesAdapter (
 
         fun bindView(item: Expense) {
             title.text = item.title
-            month.text = item.date.toDate()?.getMonth3LettersName()
-            day.text = item.date.toDate()?.getDayNumber()
+            month.text = item.selectedDate.getMonth3LettersName()
+            day.text = item.selectedDate.getDayNumber()
             amount.text = itemView.context.getString(R.string.text_value_money, item.amount)
         }
 

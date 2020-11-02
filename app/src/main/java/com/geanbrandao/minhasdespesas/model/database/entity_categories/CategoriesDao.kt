@@ -13,7 +13,7 @@ interface CategoriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(datas: List<CategoriesData>): Completable
 
-    @Query("SELECT * FROM ${CategoriesData.TABLE_NAME}")
+    @Query("SELECT * FROM ${CategoriesData.TABLE_NAME} ORDER BY ${CategoriesData.NAME}")
     fun getAll(): Flowable<List<CategoriesData>>
 
     @Delete
