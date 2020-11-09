@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motion_base"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
+    app:layoutDescription="@xml/activity_splash_screen_scene"
     tools:context=".ui.splash_screen.SplashScreenActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_logo"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:src="@drawable/ic_money_off"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:id="@+id/icon_2"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_icon"
+        tools:layout_editor_absoluteX="131dp"
+        tools:layout_editor_absoluteY="241dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icon_1"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:src="@drawable/ic_bar"
+        android:adjustViewBounds="true" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

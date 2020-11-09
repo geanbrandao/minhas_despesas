@@ -1,7 +1,8 @@
 package com.geanbrandao.minhasdespesas.ui.splash_screen
 
 import android.os.Bundle
-import com.geanbrandao.minhasdespesas.R
+import androidx.constraintlayout.motion.widget.MotionLayout
+import com.geanbrandao.minhasdespesas.databinding.ActivitySplashScreenBinding
 import com.geanbrandao.minhasdespesas.getColorNameFromArray
 import com.geanbrandao.minhasdespesas.goToActivity
 import com.geanbrandao.minhasdespesas.model.database.entity_categories.CategoriesData
@@ -15,19 +16,41 @@ import java.util.*
 
 class SplashScreenActivity : BaseActivity() {
 
+    private lateinit var binding: ActivitySplashScreenBinding
+
     private val viewModel: SplashViewModel by viewModel()
 
     private var disposableGet: Disposable? = null
     private var disposableAdd: Disposable? = null
 
+    private var dbOk = false
+    private var motionOK = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
         createListeners()
     }
 
     private fun createListeners() {
+        binding.motionBase.setTransitionListener(object: MotionLayout.TransitionListener {
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
+
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
+
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                motionOK = true
+                nextScreen()
+            }
+
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
+
+        })
+
+
         setupCategories()
     }
 
@@ -38,8 +61,8 @@ class SplashScreenActivity : BaseActivity() {
                         createCategories()
                     } else {
                         disposableGet?.dispose()
-                        goToActivity(HomeActivity::class.java)
-                        finish()
+                        dbOk = true
+                        nextScreen()
                     }
                 },
                 onError = {
@@ -69,10 +92,17 @@ class SplashScreenActivity : BaseActivity() {
                     Timber.e(it)
                 },
                 onComplete = {
-                    goToActivity(HomeActivity::class.java)
-                    finish()
+                    dbOk = true
+                    nextScreen()
                 }
         )
+    }
+
+    private fun nextScreen() {
+        if (dbOk && motionOK) {
+            goToActivity(HomeActivity::class.java)
+            finish()
+        }
     }
 
     override fun onStop() {
