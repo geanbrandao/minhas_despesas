@@ -63,21 +63,21 @@ class StatisticsActivity : BaseActivity() {
     private fun generateReport(expenses: List<Expense>) {
         val data: ArrayList<MonthExpenseReport> = arrayListOf()
         expenses.forEach { expense ->
-            val cateforiesExpenses: ArrayList<CategoriesExpenses> = arrayListOf()
-            expense.categories.forEach { category ->
-                cateforiesExpenses.add(
-                    CategoriesExpenses(
-                        category,
-
-                    )
-                )
-            }
-
-            data.add(
-                MonthExpenseReport(
-                    expense.selectedDate,
-                    expense.selectedDate.getMonth3LettersName().plus("/").plus(expense.selectedDate.getYearNumber())
-                ))
+//            val cateforiesExpenses: ArrayList<CategoriesExpenses> = arrayListOf()
+//            expense.categories.forEach { category ->
+//                cateforiesExpenses.add(
+//                    CategoriesExpenses(
+//                        category,
+//
+//                    )
+//                )
+//            }
+//
+//            data.add(
+//                MonthExpenseReport(
+//                    expense.selectedDate,
+//                    expense.selectedDate.getMonth3LettersName().plus("/").plus(expense.selectedDate.getYearNumber())
+//                ))
         }
     }
 
@@ -90,7 +90,7 @@ class StatisticsActivity : BaseActivity() {
         val categoriesExpenses: ArrayList<CategoriesExpenses> = arrayListOf(
             CategoriesExpenses(
                 Category(UUID.randomUUID().toString(), "Casa", "ic_house", false, false, getColorNameFromArray(0)),
-                21.39f,
+                5.31f,
                 2
             ),
             CategoriesExpenses(

@@ -67,6 +67,7 @@ class BarsVerticalAdapter(
         fun bindView(item: CategoriesExpenses, maxSpentCategory: Float) {
             binding.imageIcon.setImageDrawable(context.getIconFromString(item.category.icon, R.color.colorWhite))
             val colorId = context.getColorFromString(item.category.colorName)
+//            binding.imageIconBg.setImageDrawable(context.getIconFromString(item.category.icon, colorId))
             setMaxAndProgress(maxSpentCategory, item.valueSpentCategory, colorId)
             itemView.setOnClickListener {
                 onClickItem(item)

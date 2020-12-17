@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.geanbrandao.minhasdespesas.R
+import com.geanbrandao.minhasdespesas.databinding.ItemSimpleCategoryBinding
 import com.geanbrandao.minhasdespesas.getIconFromString
 import com.geanbrandao.minhasdespesas.model.Category
 import kotlinx.android.synthetic.main.item_simple_category.view.*
@@ -52,14 +53,16 @@ class CategorySimpleAdapter(
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        val category = itemView.text_category_name as AppCompatTextView
+        var binding: ItemSimpleCategoryBinding = ItemSimpleCategoryBinding.bind(itemView)
+
+//        val category = itemView.text_category_name as AppCompatTextView
 
         private val context = itemView.context
 
         fun bindView(item: Category) {
             val drawable = context.getIconFromString(item.icon, R.color.colorWhite)
-            category.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
-            category.text = item.name
+            binding.textCategoryName.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+            binding.textCategoryName.text = item.name
         }
     }
 }

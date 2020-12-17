@@ -8,6 +8,7 @@ import android.text.Selection
 import android.text.TextWatcher
 import android.view.View
 import com.geanbrandao.minhasdespesas.*
+import com.geanbrandao.minhasdespesas.databinding.ActivityAddEditBinding
 import com.geanbrandao.minhasdespesas.model.Category
 import com.geanbrandao.minhasdespesas.model.Expense
 import com.geanbrandao.minhasdespesas.ui.adapters.CategorySimpleAdapter
@@ -16,8 +17,6 @@ import com.geanbrandao.minhasdespesas.ui.base.activity.BaseActivity
 import com.geanbrandao.minhasdespesas.ui.category.CategoryActivity
 import com.geanbrandao.minhasdespesas.ui.navigation.home.fragments.HomeFragment
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.activity_add_edit.*
-import kotlinx.android.synthetic.main.component_toolbar.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.time.OffsetDateTime
@@ -25,6 +24,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class AddEditActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityAddEditBinding
 
     private val viewModel: AddEditViewModel by viewModel()
 
@@ -45,7 +46,8 @@ class AddEditActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_edit)
+        binding = ActivityAddEditBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
         date = OffsetDateTime.now()
@@ -60,16 +62,16 @@ class AddEditActivity : BaseActivity() {
         } ?: run {
             val item = intent.getSerializableExtra(HomeFragment.EXPENSE_EDIT_KEY) as Expense?
             item?.let {
-                input_amount.setText("%.2f".format(item.amount))
-                input_title.setText(item.title)
-                text_date.text = item.selectedDate.toStringDateFormated()
+                binding.inputAmount.setText("%.2f".format(item.amount))
+                binding.inputTitle.setText(item.title)
+                binding.textDate.text = item.selectedDate.toStringDateFormated()
                 date = item.selectedDate
-                input_description.setText(item.description)
+                binding.inputDescription.setText(item.description)
 
                 if (it.categories.size > 0) {
                     adapter.addAll(it.categories)
-                    recycler_selected_category.visibility = View.VISIBLE
-                    text_category.visibility = View.GONE
+                    binding.recyclerSelectedCategory.show()
+                    binding.textCategory.hide()
                 }
             }
         }
@@ -80,43 +82,43 @@ class AddEditActivity : BaseActivity() {
         setupToolbar()
         setupDatePicker()
 
-        recycler_selected_category.adapter = adapter
+        binding.recyclerSelectedCategory.adapter = adapter
 
-        button_save.setOnClickListener {
+        binding.buttonSave.setOnClickListener {
             addItem()
         }
 
-        text_date.setOnClickListener {
+        binding.textDate.setOnClickListener {
             picker.show()
         }
 
-        text_category.setOnClickListener {
+        binding.textCategory.setOnClickListener {
             goToSelectCategories(adapter.data)
         }
 
-        recycler_selected_category.setOnClickListener {
+        binding.recyclerSelectedCategory.setOnClickListener {
             goToSelectCategories(adapter.data)
         }
 
-        Selection.setSelection(input_amount.text, input_amount.text!!.length)
+        Selection.setSelection(binding.inputAmount.text, binding.inputAmount.text!!.length)
 
-        input_amount.addTextChangedListener(object : TextWatcher {
+        binding.inputAmount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(query: CharSequence?, start: Int, before: Int, count: Int) {
                 query?.let {
-                    input_amount.removeTextChangedListener(this)
+                    binding.inputAmount.removeTextChangedListener(this)
                     val clearText = it.toString().replace(" ", "")
                             .replace(".", "")
                             .replace(",", "")
                             .replace("-", "")
                     val parsed = clearText.toDouble() / 100f
                     val formatted = "%.2f".format(parsed.toFloat())
-                    input_amount.setText(formatted)
-                    input_amount.setSelection(formatted.length)
-                    input_amount.addTextChangedListener(this)
+                    binding.inputAmount.setText(formatted)
+                    binding.inputAmount.setSelection(formatted.length)
+                    binding.inputAmount.addTextChangedListener(this)
                     Timber.tag("Valor").d(" formated - ${formatted}")
 
                 }
@@ -131,12 +133,12 @@ class AddEditActivity : BaseActivity() {
         val year = calendar.get(Calendar.YEAR)
         Timber.d("CELENDAR $year/$month/$day")
 
-        text_date.text = date?.toStringDateFormated()
+        binding.textDate.text = date?.toStringDateFormated()
 
         picker = DatePickerDialog(this, { _, y, m, d ->
             Timber.d("$y/$m/$d")
             date = formatDateString(y, m + 1, d)
-            text_date.text = date?.toStringDateFormated()
+            binding.textDate.text = date?.toStringDateFormated()
         }, year, month, day)
     }
 
@@ -172,9 +174,9 @@ class AddEditActivity : BaseActivity() {
 
         val id = data?.id ?: UUID.randomUUID().toString() // se for editado ja tem id
 
-        val title = input_title.text.toString()
-        val amount = input_amount.text.toString().replace(",", "").toInt() / 100f
-        val description = input_description.text.toString()
+        val title = binding.inputTitle.text.toString()
+        val amount = binding.inputAmount.text.toString().replace(",", "").toInt() / 100f
+        val description = binding.inputDescription.text.toString()
 
         val selectedDate = date ?: OffsetDateTime.now()
 
@@ -200,10 +202,10 @@ class AddEditActivity : BaseActivity() {
     }
 
     private fun setupToolbar() {
-        toolbar.title.text = getString(R.string.add_edit_activity_title_page)
+        binding.toolbar.title.text = getString(R.string.add_edit_activity_title_page)
 
-        toolbar.back.increaseHitArea(20f)
-        toolbar.back.setOnClickListener {
+        binding.toolbar.back.increaseHitArea(20f)
+        binding.toolbar.back.setOnClickListener {
             stepBefore()
         }
     }
@@ -218,12 +220,12 @@ class AddEditActivity : BaseActivity() {
                         it.forEach { Timber.d("NOME DA CATEGORIA - ${it.name}") }
                         adapter.clear()
                         adapter.addAll(it)
-                        recycler_selected_category.visibility = View.VISIBLE
-                        text_category.visibility = View.GONE
+                        binding.recyclerSelectedCategory.show()
+                        binding.textCategory.hide()
                     } else {
                         adapter.clear()
-                        recycler_selected_category.visibility = View.GONE
-                        text_category.visibility = View.VISIBLE
+                        binding.recyclerSelectedCategory.hide()
+                        binding.textCategory.show()
                     }
                 }
             }
